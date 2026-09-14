@@ -1,0 +1,29 @@
+<div class="hero-section hero-slider dots">
+  <div class="hero-single" *ngFor="let slide of slides; let i = index"
+    [style.backgroundImage]="'url(' + slide.image + ')'" [class.active]="i === currentSlide">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-7 col-lg-7">
+          <div class="hero-content">
+            <h6 class="hero-sub-title wow animate__animated animate__fadeInUp" data-wow-duration="1s"
+              data-wow-delay=".25s">
+              {{ slide.subtitle }}
+            </h6>
+            <h1 class="hero-title wow animate__animated animate__fadeInUp" data-wow-duration="1s" data-wow-delay=".50s">
+              {{ slide.title }}
+            </h1>
+            <p class="wow animate__animated animate__fadeInUp" data-wow-duration="1s" data-wow-delay=".75s">
+              {{ slide.description }}
+            </p>
+            <div class="hero-btn wow animate__animated animate__fadeInUp" data-wow-duration="1s" data-wow-delay="1s">
+              <a [routerLink]="['/contact-us']" class="theme-btn">Contact Us <i class="far fa-arrow-right"></i></a>
+              <a [routerLink]="['/about-us']" class="theme-btn border-btn">About Us <i class="far fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control prev" (click)="prevSlide()">&#8249;</button>
+  <button class="carousel-control next" (click)="nextSlide()">&#8250;</button>
+</div>

@@ -1,0 +1,33 @@
+export enum API {
+    contact = 'contact',
+    update_profile = 'update-profile',
+    destinations = 'destinations',
+    review = 'review',
+    profile = 'profile',
+    get_usage_history = 'usage',
+    forgot_password = 'forgot-password',
+    reset_password = 'password/reset',
+    submit_enquiry = 'submit-enquiry',
+    submit_membership_booking = 'submit-membership-booking',
+    
+}
+export enum AdminAPI {
+    get_all_invoices = 'admin/get_all_invoices',
+    invoices = 'admin/invoices',
+    process_invoices = 'admin/process-invoices',
+    export_invoices = 'admin/export-invoices',
+    get_all_users = 'admin/get-all-users',
+    register = 'admin/register',
+    user = 'admin/user',
+    update_profile = 'update-profile',
+    destinations = 'destinations',
+    create_destination = 'admin/destinations',
+    get_reviews_by_status = 'admin/get-reviews-by-status',
+    update_review_status = 'admin/update-review-status',
+    get_usage_history = 'admin/usage',
+    add_usage = 'admin/add-usage',
+    upload_agreement = 'admin/upload-agreement',
+    agreement = 'admin/agreement',
+    get_all_enquiries = 'admin/get-all-enquiries',
+    get_all_membership_booking = 'admin/get-all-membership-booking',
+}

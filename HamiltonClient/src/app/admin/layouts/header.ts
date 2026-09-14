@@ -1,0 +1,98 @@
+﻿import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Router, NavigationEnd } from '@angular/router';
+import { AppService } from '../service/app.service';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { AuthService } from '../../../services/auth.service';
+// import { TranslateService } from '@ngx-translate/core';
+
+@Component({
+    selector: 'header',
+    templateUrl: './header.html',
+    animations: [
+        trigger('toggleAnimation', [
+            transition(':enter', [style({ opacity: 0, transform: 'scale(0.95)' }), animate('100ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))]),
+            transition(':leave', [animate('75ms', style({ opacity: 0, transform: 'scale(0.95)' }))]),
+        ]),
+    ],
+})
+export class HeaderComponent {
+    store: any;
+    search = false;
+    // notifications = [
+    //     {
+    //         id: 1,
+    //         profile: 'user-profile.jpeg',
+    //         message: '<strong class="text-sm mr-1">John Doe</strong>invite you to <strong>Prototyping</strong>',
+    //         time: '45 min ago',
+    //     },
+    //     {
+    //         id: 2,
+    //         profile: 'profile-34.jpeg',
+    //         message: '<strong class="text-sm mr-1">Adam Nolan</strong>mentioned you to <strong>UX Basics</strong>',
+    //         time: '9h Ago',
+    //     },
+    //     {
+    //         id: 3,
+    //         profile: 'profile-16.jpeg',
+    //         message: '<strong class="text-sm mr-1">Anna Morgan</strong>Upload a file',
+    //         time: '9h Ago',
+    //     },
+    // ];
+    notifications = [];
+    currentUser: any;
+
+    constructor(
+        // public translate: TranslateService,
+        public storeData: Store<any>,
+        public router: Router,
+        public auth: AuthService
+    ) {
+        this.initStore();
+    }
+    async initStore() {
+        this.storeData
+            .select((d) => d.index)
+            .subscribe((d) => {
+                this.store = d;
+            });
+    }
+
+    ngOnInit() {
+        this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        this.currentUser = this.currentUser?.user;
+        this.setActiveDropdown();
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+                this.setActiveDropdown();
+            }
+        });
+    }
+
+    setActiveDropdown() {
+        const selector = document.querySelector('ul.horizontal-menu a[routerLink="' + window.location.pathname + '"]');
+        if (selector) {
+            selector.classList.add('active');
+            const all: any = document.querySelectorAll('ul.horizontal-menu .nav-link.active');
+            for (let i = 0; i < all.length; i++) {
+                all[0]?.classList.remove('active');
+            }
+            const ul: any = selector.closest('ul.sub-menu');
+            if (ul) {
+                let ele: any = ul.closest('li.menu').querySelectorAll('.nav-link');
+                if (ele) {
+                    ele = ele[0];
+                    setTimeout(() => {
+                        ele?.classList.add('active');
+                    });
+                }
+            }
+        }
+    }
+
+    removeNotification(value: number) {
+        this.notifications = this.notifications.filter((d) => d.id !== value);
+    }
+    
+}

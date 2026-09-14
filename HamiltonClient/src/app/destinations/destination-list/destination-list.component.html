@@ -1,0 +1,121 @@
+<main class="main">
+
+  <app-header-breadcrumb [breadcrumbTitle]="'Destinations'"></app-header-breadcrumb>
+
+
+  <!-- search area -->
+  <div class="container pt-50 px-5">
+    <div class="row">
+      <div class="col-lg-12">
+          <div class="flex flex-col gap-2 justify-end sm:flex-row sm:ltr:ml-auto rtl:mr-auto">
+            <div>
+              <input [(ngModel)]="this.params.keyword" type="text" class="form-input" placeholder="Search..." (ngModelChange)="changeServer(1, 'search')" />
+            </div>
+            <div>
+              <select id="category" class="form-select text-white-dark w-full category-padding" [(ngModel)]="this.params.category"
+                (ngModelChange)="changeServer(1, 'category')">
+                <option value="">All</option>
+                <option value="Domestic">Hamilton Garden & Associated Resorts</option>
+                <option value="International">Hashtag Exchange</option>
+              </select>
+            </div>
+            <div>
+              <select id="category" class="form-select text-white-dark w-full md:w-40" [(ngModel)]="this.params.location"
+                (ngModelChange)="changeServer(1, 'location')">
+                <option value="">All</option>
+                <option *ngFor="let item of this.locations" value={{item}}>{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- search area end -->
+
+    <!-- <div class="container pt-50" *ngIf="this.params.category != 'Domestic'">
+      <div class="about-right">
+        <div class="site-header">
+          <span class="site-title-tagline">Exchange Charges:</span>
+        </div>
+        <div class="about-list-wrapper">
+          <ul class="about-list list-unstyled">
+            <li>
+              <div class="icon"><span class="far fa-check-circle"></span></div>
+              <div class="text">
+                <p>Domestic Exchange Fee - 11,500/- per week.</p>
+              </div>
+            </li>
+            <li>
+              <div class="icon"><span class="far fa-check-circle"></span></div>
+              <div class="text">
+                <p>Asia Exchange Fee - 18,500/- per week.</p>
+              </div>
+            </li>
+            <li>
+              <div class="icon"><span class="far fa-check-circle"></span></div>
+              <div class="text">
+                <p>International Exchange Fee- 25,500/- per week.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div> -->
+
+  <!-- destination area -->
+  <div class="destination-area2 pt-50 pb-120">
+    <div class="container">
+      <div class="row align-items-center">
+
+        <div class="col-md-6 col-lg-4" *ngFor="let item of this.items">
+          <div class="destination-item">
+            <a (click)="viewDestination(item)">
+              <div class="destination-img">
+                <img src="{{item?.images[0]?.url}}" alt="">
+              </div>
+              <div class="destination-info">
+                <h5><i class="far fa-map-marker-alt"></i> {{item?.location}}</h5>
+                <span>{{item?.name}}</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- destination area end -->
+
+  <div class="mb-5">
+    <div class="flex w-full flex-col justify-center">
+        <ul class="m-auto mb-4 inline-flex items-center space-x-1 rtl:space-x-reverse">
+          <li>
+            <button type="button" (click)="changeServer(this.params.current_page - 1)"
+              class="flex justify-center rounded-full bg-white-light p-2 font-semibold text-dark transition hover:bg-primary hover:text-white dark:bg-[#191e3a] dark:text-white-light dark:hover:bg-primary"
+              [disabled]="this.params.current_page === 1">
+              <icon-carets-down class="rotate-90 rtl:-rotate-90" />
+            </button>
+          </li>
+        
+          <li *ngFor="let item of [].constructor(this.totalPages); let i = index;">
+            <button type="button" (click)="changeServer(i + 1)"
+              class="flex justify-center rounded-full bg-white-light px-3.5 py-1 font-semibold text-dark transition hover:bg-primary hover:text-white dark:bg-[#191e3a] dark:text-white-light dark:hover:bg-primary"
+              [ngClass]="{'bg-primary text-white': this.params.current_page === (i + 1)}">
+              {{i + 1}}
+            </button>
+          </li>
+        
+          <li>
+            <button type="button" (click)="changeServer(this.params.current_page + 1)"
+              class="flex justify-center rounded-full bg-white-light p-2 font-semibold text-dark transition hover:bg-primary hover:text-white dark:bg-[#191e3a] dark:text-white-light dark:hover:bg-primary"
+              [disabled]="this.params.current_page == this.totalPages">
+              <icon-carets-down class="-rotate-90 rtl:rotate-90" />
+            </button>
+          </li>
+        </ul>
+    </div>
+  </div>
+
+
+
+</main>

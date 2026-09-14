@@ -1,0 +1,38 @@
+<main class="main">
+
+  <app-header-breadcrumb [breadcrumbTitle]="'Testimonials'"></app-header-breadcrumb>
+
+
+
+  <!-- testimonial-area -->
+  <div class="testimonial-area py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-4" *ngFor="let testimonial of testimonials">
+          <div class="testimonial-single">
+            <div class="testimonial-quote">
+              <span class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></span>
+              <div class="testimonial-rate">
+                <ng-container *ngFor="let star of generateStars(testimonial.rating)">
+                  <i class="fas fa-star"></i>
+                </ng-container>
+              </div>
+              <p>{{ testimonial.review }}</p>
+            </div>
+            <div class="testimonial-content">
+              <div class="testimonial-author-info">
+                <h4>{{ testimonial.name }}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- testimonial-area end -->
+
+
+
+
+</main>

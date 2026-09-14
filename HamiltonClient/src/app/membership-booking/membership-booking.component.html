@@ -1,0 +1,130 @@
+<main class="main">
+  <app-header-breadcrumb [breadcrumbTitle]="'Package Booking'"></app-header-breadcrumb>
+
+  <div class="contact-area py-5">
+    <div class="container">
+      <div class="contact-wrapper py-5">
+        <div class="row">
+          <div class="col-md-12 align-self-center">
+            <div class="contact-form">
+              <div class="contact-form-header">
+                <h2>Subscribe Your Package Now</h2>
+                <p>Need help or have any questions? Our team is here to guide you every step of the way. Feel free to
+                  reach out for
+                  personalized assistance and support.</p>
+              </div>
+              <form [formGroup]="membershipBookingForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="text" class="form-control" formControlName="name" placeholder="Your Name">
+                      <div class="text-danger"
+                        *ngIf="membershipBookingForm.get('name').invalid && membershipBookingForm.get('name').touched">
+                        <small *ngIf="membershipBookingForm.get('name').errors?.['required']">Name is required.</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="text" class="form-control" formControlName="mobile" placeholder="Your Mobile Number">
+                      <div class="text-danger"
+                        *ngIf="membershipBookingForm.get('mobile').invalid && membershipBookingForm.get('mobile').touched">
+                        <small *ngIf="membershipBookingForm.get('mobile').errors?.['required']">Mobile Number is
+                          required.</small>
+                        <small *ngIf="membershipBookingForm.get('mobile').errors?.['pattern']">Invalid mobile
+                          number.</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="email" class="form-control" formControlName="email" placeholder="Your Email">
+                      <div class="text-danger"
+                        *ngIf="membershipBookingForm.get('email').invalid && membershipBookingForm.get('email').touched">
+                        <small *ngIf="membershipBookingForm.get('email').errors?.['required']">Email is
+                          required.</small>
+                        <small *ngIf="membershipBookingForm.get('email').errors?.['email']">Invalid email
+                          format.</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="number" class="form-control" formControlName="age" placeholder="Your Age">
+                      <div class="text-danger"
+                        *ngIf="membershipBookingForm.get('age').invalid && membershipBookingForm.get('age').touched">
+                        <small *ngIf="membershipBookingForm.get('age').errors?.['required']">Age is required.</small>
+                        <small *ngIf="membershipBookingForm.get('age').errors?.['min']">Age must be at least 1.</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="text" class="form-control" formControlName="address" placeholder="Your Address">
+                      <div class="text-danger"
+                        *ngIf="membershipBookingForm.get('address').invalid && membershipBookingForm.get('address').touched">
+                        <small *ngIf="membershipBookingForm.get('address').errors?.['required']">Address is
+                          required.</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="text" class="form-control" formControlName="currentCity" placeholder="Current City">
+                      <div class="text-danger"
+                        *ngIf="membershipBookingForm.get('currentCity').invalid && membershipBookingForm.get('currentCity').touched">
+                        <small *ngIf="membershipBookingForm.get('currentCity').errors?.['required']">Current city is
+                          required.</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <select id="membership" class="form-control" formControlName="membership"
+                        (change)="setMembershipInfo($event)">
+                        <option value="ps">Please Select Any Package</option>
+                        <option *ngFor="let package of membershipPackages" [value]="package.value">
+                          {{ package.label }}
+                        </option>
+                      </select>
+                      <div class="text-danger"
+                        *ngIf="(membershipBookingForm.get('membership').invalid || membershipBookingForm.get('membership').value == 'ps') && membershipBookingForm.get('membership').touched">
+                        <small
+                          *ngIf="membershipBookingForm.get('membership').errors?.['required'] || membershipBookingForm.get('membership').value == 'ps'">Package
+                          is required.</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="text" class="form-control" formControlName="membershipInfo" placeholder="Package Details">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <textarea formControlName="message" cols="30" rows="5" class="form-control"
+                    placeholder="Write Your message"></textarea>
+                  <div class="text-danger"
+                    *ngIf="membershipBookingForm.get('message').invalid && membershipBookingForm.get('message').touched">
+                    <small *ngIf="membershipBookingForm.get('message').errors?.['required']">Message is
+                      required.</small>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-end pt-2">
+                  <button type="submit" class="contact-btn">
+                    <i class="far fa-paper-plane"></i> Submit
+                  </button>
+                </div>
+                <div class="col-md-12 mt-3">
+                  <div class="form-message text-success" *ngIf="bookingSent">Your booking info has been sent
+                    successfully!
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

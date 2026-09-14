@@ -1,0 +1,110 @@
+<main class="main">
+
+  <app-header-breadcrumb [breadcrumbTitle]="'Contact Us'"></app-header-breadcrumb>
+
+  <!-- contact area -->
+  <div class="contact-area py-5">
+    <div class="container">
+      <div class="contact-wrapper p-5">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="contact-map">
+              <iframe src="https://www.google.com/maps?q=28.5647876,77.2214493&hl=es;z=14&output=embed" style="border:0;"
+                allowfullscreen="" loading="lazy"></iframe>
+            </div>
+          </div>
+          <div class="col-md-6 align-self-center">
+            <div class="contact-form">
+              <div class="contact-form-header">
+                <h2>Get In Touch</h2>
+                <p>Have questions or need assistance? We’re here to provide you with all the information and support you need. Whether
+                you're looking to book your next adventure, need more details about our services, or just want to say hello, don’t
+                hesitate to reach out to us.</p>
+              </div>
+              <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="text" class="form-control" formControlName="name" placeholder="Your Name">
+                      <div class="text-danger"
+                        *ngIf="contactForm.get('name').invalid && (contactForm.get('name').dirty || contactForm.get('name').touched)">
+                        <small *ngIf="contactForm.get('name').errors?.['required']">Name is required.</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="email" class="form-control" formControlName="email" placeholder="Your Email">
+                      <div class="text-danger"
+                        *ngIf="contactForm.get('email').invalid && (contactForm.get('email').dirty || contactForm.get('email').touched)">
+                        <small *ngIf="contactForm.get('email').errors?.['required']">Email is required.</small>
+                        <small *ngIf="contactForm.get('email').errors?.['email']">Invalid email format.</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" formControlName="subject" placeholder="Your Subject">
+                  <div class="text-danger"
+                    *ngIf="contactForm.get('subject').invalid && (contactForm.get('subject').dirty || contactForm.get('subject').touched)">
+                    <small *ngIf="contactForm.get('subject').errors?.['required']">Subject is required.</small>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <textarea formControlName="message" cols="30" rows="5" class="form-control"
+                    placeholder="Write Your Message"></textarea>
+                  <div class="text-danger"
+                    *ngIf="contactForm.get('message').invalid && (contactForm.get('message').dirty || contactForm.get('message').touched)">
+                    <small *ngIf="contactForm.get('message').errors?.['required']">Message is required.</small>
+                  </div>
+                </div>
+                <button type="submit" class="contact-btn">
+                  <i class="far fa-paper-plane"></i> Send Message
+                </button>
+                <div class="col-md-12 mt-3">
+                  <div class="form-message text-success" *ngIf="messageSent">Your message has been sent successfully!</div>
+                </div>
+              </form>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-content">
+        <div class="row">
+          <div class="col-md-6 col-lg-6">
+            <div class="contact-info">
+              <i class="far fa-map-marker-alt"></i>
+              <h5>Office Address</h5>
+              <p>Plaza 209-A, 2nd Floor, Masjid Moth, South Ex Part-2, New Delhi - 110049</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-6">
+            <div class="contact-info">
+              <i class="far fa-phone"></i>
+              <h5>Call Us</h5>
+              <p>+91-9810341979, 011-43083925, 011-43087380</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-6">
+            <div class="contact-info">
+              <i class="far fa-envelope"></i>
+              <h5>Email Us</h5>
+              <p>info&#64;hamiltongardeninnsuites.com</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-6">
+            <div class="contact-info">
+              <i class="far fa-clock"></i>
+              <h5>Office Open</h5>
+              <p>Mon - Sat (10AM - 07PM)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end contact area -->
+</main>

@@ -1,0 +1,41 @@
+.profile-avatar{
+    width: 60%;
+}
+.my-profile{
+    font-family: 'Nunito', sans-serif;
+}
+
+.custom-file-container .image-preview {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius: 4px;
+    height: 300px;
+    overflow: auto;
+    padding: 4px;
+    transition: background .2s ease-in-out;
+    width: 100%;
+    margin-top: 54px;
+    margin-bottom: 40px;
+    background-color: transparent;
+}
+
+.custom-file-container .image-preview-item {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px #33333340;
+    float: left;
+    height: 60%;
+    margin: 1.858736059%;
+    position: relative;
+    transition: background .2s ease-in-out, opacity .2s ease-in-out;
+    width: 29.5%
+}
+
+@media (max-width: 640px) {
+    .custom-file-container .image-preview-item {
+        width: 100%;
+    }
+}

@@ -1,0 +1,134 @@
+<main class="main">
+
+  <!-- breadcrumb -->
+  <div class="site-breadcrumb" style="background: url(assets/clientTemplate/img/bg/breadcrumb.webp)">
+    <div class="container">
+      <h2 class="breadcrumb-title">Destination Details</h2>
+      <ul class="breadcrumb-menu">
+        <li><a routerLink="/home">Home</a></li>
+        <li><a routerLink="/destinations/list">Destination List</a></li>
+        <li class="active">Destination Details</li>
+      </ul>
+    </div>
+  </div>
+  <!-- breadcrumb end -->
+
+
+
+  <!-- tour-details -->
+  <div class="tour-single py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="tour-single-img">
+            <img src="{{this.destination?.images[0]?.url}}" alt="">
+          </div>
+
+          <div class="tour-single-header">
+            <div class="tour-single-content">
+              <div class="tour-single-info">
+                <h3>{{this.destination?.name}}</h3>
+                <div class="flex text-warning tour-single-rating">
+                  <div *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                    <icon-star *ngIf="i < this.destination?.ratings" class="fill-warning"></icon-star>
+                  </div>
+                  <div *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                    <icon-star *ngIf="i < (5-this.destination?.ratings)"></icon-star>
+                  </div>
+                  <span>({{this.destination.ratings !=0 ? this.destination?.numOfReviews : 0}} Reviews)</span>
+                </div>
+              </div>
+              <div class="tour-single-price">
+                <span>{{this.destination?.location}}</span>
+              </div>
+            </div>
+          </div>
+
+          <h3>Destination Overview</h3>
+          <p class="mt-20" [innerHTML]="destination?.description | lineBreak"></p>
+
+
+          <div class="destination-single-gallery">
+            <h3>Destination Gallery</h3>
+            <div class="row mt-20 popup-gallery">
+              <ng-container *ngFor="let item of this.destination?.images; let i = index">
+              <div class="col-md-6" *ngIf="i > 0">
+                <div class="destination-single-gallery-img" >
+                  <img src="{{item?.url}}" alt="">
+                  <!-- <a class="popup-img" href="{{item?.url}}"><i class="far fa-plus"></i></a> -->
+                </div>
+                
+              </div>
+              </ng-container>
+            </div>
+          </div>
+
+
+          <div class="blog-comments mt-50">
+            <h4>Reviews ({{ this.destination.ratings !=0 ? this.destination?.numOfReviews : 0}})</h4>
+            <p *ngIf="this.destination.ratings ==0">No Reviews Data!</p>
+            <div class="blog-comments-wrapper">
+              <div class="blog-comments-single" *ngFor="let item of this.destination?.reviews">
+                <ng-container *ngIf="item?.status == 'approved' ">
+                  <img class="profile-avatar" src="/assets/clientTemplate/img/profile/profile-avatar-3D.webp" alt="thumb">
+                  <div class="blog-comments-content">
+                    <h5>{{item?.createdBy}}</h5>
+                    <span><i class="far fa-clock"></i> {{item?.createdAt | date : 'EEEE dd MMM yyyy'}}</span>
+                    <p>{{item?.comment}}</p>
+                    <div class="flex text-warning rating-justify">
+                      <div *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                        <icon-star *ngIf="i < item?.rating" class="fill-warning"></icon-star>
+                      </div>
+                      <div *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                        <icon-star *ngIf="i < (5-item?.rating)"></icon-star>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="blog-comments-form" *ngIf="this.auth.isLoggedIn()">
+              <h4>Submit Your Review</h4>
+              <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="review-rate mb-20">
+                      <span>Your Rate:</span>
+                      <i class="far fa-star" *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
+                        [class.filled]="i < hoverRating || i < rating" (mouseenter)="hoverStar(i + 1)"
+                        (mouseleave)="hoverStar(0)" (click)="rateDestination(i + 1)">
+                      </i>
+                      <div *ngIf="reviewForm.get('rating')?.invalid && reviewForm.get('rating')?.touched && this.submitted"
+                        class="text-danger">
+                        Please provide a rating.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <textarea class="form-control" formControlName="comment" rows="5" placeholder="Your Review*"
+                        required></textarea>
+                      <div *ngIf="reviewForm.get('comment')?.invalid && reviewForm.get('comment')?.touched && this.submitted"
+                        class="text-danger">
+                        Please enter a review comment.
+                      </div>
+                    </div>
+                    <button type="submit" class="comment-btn"><i class="far fa-paper-plane"></i>
+                      Submit Review</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- tour-details end -->
+
+
+
+</main>

@@ -1,0 +1,30 @@
+<!-- gallery area -->
+  <div class="gallery-area pb-120">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 mx-auto">
+          <div class="site-heading text-center">
+            <span class="site-title-tagline">Gallery</span>
+            <h2 class="site-title">Watch Our Gallery</h2>
+            <div class="heading-divider"></div>
+            <p>
+              Discover the beauty of Hamilton Garden Inn & Suites through our vibrant gallery. Whether it's breathtaking landscapes,
+              luxurious rooms, or unforgettable moments, our collection showcases the essence of your next great adventure.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-area">
+        <div class="container">
+          <div class="row popup-gallery" data-masonry='{"percentPosition": true }'>
+            <div class="col-md-4" *ngFor="let image of images">
+              <div class="gallery-item">
+                <img [src]="image.thumb" [alt]="image.alt" loading="lazy" width="380" height="260">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- gallery area end -->

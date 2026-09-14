@@ -1,0 +1,334 @@
+<main class="main">
+
+  <app-header-breadcrumb [breadcrumbTitle]="'Packages'"></app-header-breadcrumb>
+
+
+  <!-- tour area -->
+  <div class="tour-area tour-area2 pt-5 pb-60">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+
+
+          <div class="row align-items-center">
+            
+            <div class="col-md-6 col-lg-4" (click)="navigateToBooking('enquiry')">
+              <div class="tour-item">
+                <div class="tour-img membership-card" style="background-color: #043c89; height: 180px;">
+                  BLUE PACKAGE
+                </div>
+                <div class="tour-meta">
+                  <ul>
+                    <li><i class="far fa-clock"></i> 25 years Holiday Package</li><br>
+                    <li><i class="far fa-user-friends"></i> 2 Adults + 2 Kids below 12 years</li><br>
+                    <li><i class="far fa-map-marker-alt"></i> Apartment - Studio</li>
+                  </ul>
+                </div>
+                <div class="tour-Info1">
+                  <!-- <a href="#">
+                    <h5>Blue Membership</h5>
+                  </a> -->
+                  <strong>Variable Charges : ₹16,000</strong>
+                </div>
+                <div class="tour-footer">
+                  <div class="tour-price">
+                    ₹6.75 <small>Lakhs</small>
+                  </div>
+                  <a (click)="navigateToBooking('Blue Membership')" class="tour-btn">Subscribe Now <i class="far fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4" (click)="navigateToBooking('enquiry')">
+              <div class="tour-item">
+                <div class="tour-img membership-card" style="background-color: #139add; height: 180px;">
+                  WHITE PACKAGE
+                </div>
+                <div class="tour-meta">
+                  <ul>
+                    <li><i class="far fa-clock"></i> 25 years Holiday Package</li><br>
+                    <li><i class="far fa-user-friends"></i> 2 Adults + 2 Kids below 12 years</li><br>
+                    <li><i class="far fa-map-marker-alt"></i> Apartment - Studio</li>
+                  </ul>
+                </div>
+                <div class="tour-Info1">
+                  <!-- <a href="#">
+                    <h5>White Membership</h5>
+                  </a> -->
+                  <strong>Variable Charges : ₹18,000</strong>
+                </div>
+                <div class="tour-footer">
+                  <div class="tour-price">
+                    ₹7.11 <small>Lakhs</small>
+                  </div>
+                  <a (click)="navigateToBooking('White Membership')" class="tour-btn">Subscribe Now <i class="far fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4" (click)="navigateToBooking('enquiry')">
+              <div class="tour-item">
+                <div class="tour-img membership-card" style="background-color: #cf4b5b; height: 180px;">
+                  RED PACKAGE
+                </div>
+                <div class="tour-meta">
+                  <ul>
+                    <li><i class="far fa-clock"></i> 25 years Holiday Package</li><br>
+                    <li><i class="far fa-user-friends"></i> 2 Adults + 2 Kids below 12 years</li><br>
+                    <li><i class="far fa-map-marker-alt"></i> Apartment - Studio</li>
+                  </ul>
+                </div>
+                <div class="tour-Info1">
+                  <!-- <a href="#">
+                    <h5>Red Membership</h5>
+                  </a> -->
+                  <strong>Variable Charges : ₹20,000</strong>
+                </div>
+                <div class="tour-footer">
+                  <div class="tour-price">
+                    ₹10.02 <small>Lakhs</small>
+                  </div>
+                  <a (click)="navigateToBooking('Red Membership')" class="tour-btn">Subscribe Now <i class="far fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- <div class="row align-items-center">
+
+            <div class="col-md-12">
+              <div class="tour-item">
+                <div class="row" (click)="navigateToBooking('enquiry')">
+                  <div class="col-md-4">
+                    <div class="tour-img membership-card" style="background-color: #6a1b9a;">
+                      PURPLE PACKAGE
+                      <img src="assets/clientTemplate/img/membership/purple.webp" alt="Pruple Package" loading="lazy">
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="tour-content-wrapper">
+                      <div class="tour-meta">
+                        <ul>
+                          <li><i class="far fa-clock"></i> 25 years Holiday Package</li>
+                          <li><i class="far fa-user-friends"></i> 2 Adults + 2 Kids below 12 years</li>
+                          <li><i class="far fa-map-marker-alt"></i> Apartment - Studio</li>
+                        </ul>
+                      </div>
+                      <div class="tour-Info1">
+                        <a>
+                          <h5>Purple Package</h5>
+                        </a>
+                      </div>
+                      <div class="tour-footer">
+                        <div class="tour-price">
+                          ₹9.78 <small>Lakhs</small>
+                        </div>
+                        <a (click)="navigateToBooking('Purple Membership')" class="tour-btn cursor-pointer">Subscribe Now <i
+                            class="far fa-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="tour-item">
+                <div class="row" (click)="navigateToBooking('enquiry')">
+                  <div class="col-md-4">
+                    <div class="tour-img membership-card" style="background-color: #e53935;">
+                      RED PACKAGE
+                      <img src="assets/clientTemplate/img/membership/red.webp" alt="Red Package" loading="lazy">
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="tour-content-wrapper">
+                      <div class="tour-meta">
+                        <ul>
+                          <li><i class="far fa-clock"></i> 25 years Holiday Package</li>
+                          <li><i class="far fa-user-friends"></i> 2 Adults + 2 Kids below 12 years</li>
+                          <li><i class="far fa-map-marker-alt"></i> Apartment - Studio</li>
+                        </ul>
+                      </div>
+                      <div class="tour-Info1">
+                        <a href="#">
+                          <h5>Red Package</h5>
+                        </a>
+                      </div>
+                      <div class="tour-footer">
+                        <div class="tour-price">
+                          ₹8.02 <small>Lakhs</small>
+                        </div>
+                        <a (click)="navigateToBooking('Red Membership')" class="tour-btn cursor-pointer">Subscribe Now <i
+                            class="far fa-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="tour-item">
+                <div class="row" (click)="navigateToBooking('enquiry')">
+                  <div class="col-md-4">
+                    <div class="tour-img membership-card" style="background-color: #f5f5f5;">
+                      WHITE PACKAGE
+                      <img src="assets/clientTemplate/img/membership/white.webp" alt="White Package" loading="lazy">
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="tour-content-wrapper">
+                      <div class="tour-meta">
+                        <ul>
+                          <li><i class="far fa-clock"></i> 25 years Holiday Package</li>
+                          <li><i class="far fa-user-friends"></i> 2 Adults + 2 Kids below 12 years</li>
+                          <li><i class="far fa-map-marker-alt"></i> Apartment - Studio</li>
+                        </ul>
+                      </div>
+                      <div class="tour-Info1">
+                        <a href="#">
+                          <h5>White Package</h5>
+                        </a>
+                      </div>
+                      <div class="tour-footer">
+                        <div class="tour-price">
+                          ₹6.11 <small>Lakhs</small>
+                        </div>
+                        <a (click)="navigateToBooking('White Membership')" class="tour-btn cursor-pointer">Subscribe Now <i
+                            class="far fa-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="tour-item">
+                <div class="row"  (click)="navigateToBooking('enquiry')">
+                  <div class="col-md-4">
+                    <div class="tour-img membership-card" style="background-color: #2196f3;">
+                      BLUE PACKAGE
+                      <img src="assets/clientTemplate/img/membership/blue.webp" alt="Blue Package" loading="lazy">
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="tour-content-wrapper">
+                      <div class="tour-meta">
+                        <ul>
+                          <li><i class="far fa-clock"></i> 25 years Holiday Package</li>
+                          <li><i class="far fa-user-friends"></i> 2 Adults + 2 Kids below 12 years</li>
+                          <li><i class="far fa-map-marker-alt"></i> Apartment - Studio</li>
+                        </ul>
+                      </div>
+                      <div class="tour-Info1">
+                        <a href="#">
+                          <h5>Blue Package</h5>
+                        </a>
+                      </div>
+                      <div class="tour-footer">
+                        <div class="tour-price">
+                          ₹4.75 <small>Lakhs</small>
+                        </div>
+                        <a (click)="navigateToBooking('Blue Membership')" class="tour-btn cursor-pointer">Subscribe Now <i
+                            class="far fa-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- tour area end -->
+
+  <!-- table area -->
+  <div class="comparison-table table-responsive my-5 px-0 container ">
+    <table class="table table-bordered mb-0">
+      <thead>
+        <tr>
+          <th>When do you prefer to holiday?</th>
+          <!-- <th class="purple-column">PURPLE</th> -->
+          <th class="blue-column">BLUE</th>
+          <th class="white-column">WHITE</th>
+          <th class="red-column">RED</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>When the resorts are not packed</td>
+          <!-- <td class="purple-column"><i class="fas fa-check-circle checkmark"></i></td> -->
+          <td class="blue-column"><i class="fas fa-check-circle checkmark"></i></td>
+          <td class="white-column"><i class="fas fa-check-circle checkmark"></i></td>
+          <td class="red-column"><i class="fas fa-check-circle checkmark"></i></td>
+        </tr>
+        <tr>
+          <td>If you love the Monsoon season</td>
+          <!-- <td class="purple-column"><i class="fas fa-check-circle checkmark"></i></td> -->
+          <td class="blue-column"><i class="fas fa-check-circle checkmark"></i></td>
+          <td class="white-column"><i class="fas fa-check-circle checkmark"></i></td>
+          <td class="red-column"><i class="fas fa-check-circle checkmark"></i></td>
+        </tr>
+        <tr>
+          <td>During the work week</td>
+          <!-- <td class="purple-column"><i class="fas fa-check-circle checkmark"></i></td> -->
+          <td class="blue-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="white-column"><i class="fas fa-check-circle checkmark"></i></td>
+          <td class="red-column"><i class="fas fa-check-circle checkmark"></i></td>
+        </tr>
+        <tr>
+          <td>During Non-Peak Season</td>
+          <!-- <td class="purple-column"><i class="fas fa-check-circle checkmark"></i></td> -->
+          <td class="blue-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="white-column"><i class="fas fa-check-circle checkmark"></i></td>
+          <td class="red-column"><i class="fas fa-check-circle checkmark"></i></td>
+        </tr>
+        <tr>
+          <td>During School / College Vacations</td>
+          <!-- <td class="purple-column"><i class="fas fa-check-circle checkmark"></i></td> -->
+          <td class="blue-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="white-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="red-column"><i class="fas fa-check-circle checkmark"></i></td>
+        </tr>
+        <tr>
+          <td>On National Holidays</td>
+          <!-- <td class="purple-column"><i class="fas fa-check-circle checkmark"></i></td> -->
+          <td class="blue-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="white-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="red-column"><i class="fas fa-check-circle checkmark"></i></td>
+        </tr>
+        <tr>
+          <td>During Festivals</td>
+          <!-- <td class="purple-column"><i class="fas fa-check-circle checkmark"></i></td> -->
+          <td class="blue-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="white-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="red-column"><i class="fas fa-check-circle checkmark"></i></td>
+        </tr>
+        <tr>
+          <td>Any time of the year</td>
+          <!-- <td class="purple-column"><i class="fas fa-check-circle checkmark"></i></td> -->
+          <td class="blue-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="white-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="red-column"><i class="fas fa-times-circle crossmark"></i></td>
+        </tr>
+        <tr>
+          <td>On Special Days i.e. New Year's Eve</td>
+          <!-- <td class="purple-column"><i class="fas fa-check-circle checkmark"></i></td> -->
+          <td class="blue-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="white-column"><i class="fas fa-times-circle crossmark"></i></td>
+          <td class="red-column"><i class="fas fa-times-circle crossmark"></i></td>
+        </tr>
+        <tr class="package-price">
+          <td>Package Price</td>
+          <!-- <td class="purple-column">Rs: 9.78 Lakh</td> -->
+          <td class="blue-column">Rs: 6.75 Lakh</td>
+          <td class="white-column">Rs: 7.11 Lakh</td>
+          <td class="red-column">Rs: 10.02 Lakh</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- table area end -->
+
+</main>

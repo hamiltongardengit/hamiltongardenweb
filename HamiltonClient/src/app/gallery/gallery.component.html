@@ -1,0 +1,22 @@
+<main class="main">
+
+  <app-header-breadcrumb [breadcrumbTitle]="'Gallery'"></app-header-breadcrumb>
+
+  <!-- gallery area -->
+  <div class="gallery-area py-5">
+    <div class="container">
+      <div class="row popup-gallery" data-masonry='{"percentPosition": true }'>
+        <div class="col-md-4" *ngFor="let image of images">
+          <div class="gallery-item">
+            <img [src]="image.thumb" [alt]="image.alt" loading="lazy">
+            <!-- <a class="popup-img" >
+              <i class="far fa-plus"></i>
+            </a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- gallery area end -->
+
+</main>

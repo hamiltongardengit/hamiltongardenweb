@@ -1,0 +1,420 @@
+<div>
+  <div>
+    <div class="mb-3 flex items-center justify-between">
+      <h5 class="text-lg font-semibold dark:text-white-light">Create User</h5>
+    </div>
+    <div
+      class="mb-5 flex overflow-y-auto whitespace-nowrap border-b border-[#ebedf2] font-semibold dark:border-[#191e3a]">
+      <a href="javascript:;"
+        class="flex gap-2 border-b border-transparent p-4 !outline-none hover:border-primary hover:text-primary"
+        [ngClass]="{ '!border-primary text-primary':  activeTab.toLowerCase() === 'home'}" (click)="activeTab = 'home'">
+        <icon-home />
+        Home
+      </a>
+      <a href="javascript:;" *ngIf="this.userId"
+        class="flex gap-2 border-b border-transparent p-4 !outline-none hover:border-primary hover:text-primary"
+        [ngClass]="{ '!border-primary text-primary':  activeTab.toLowerCase() === 'membership-detail'}"
+        (click)="activeTab = 'membership-detail';populateMembershipData();">
+        <icon-dollar-sign-circle />
+        Package Details
+      </a>
+      <a href="javascript:;" *ngIf="this.userId"
+        class="flex gap-2 border-b border-transparent p-4 !outline-none hover:border-primary hover:text-primary"
+        [ngClass]="{ '!border-primary text-primary':  activeTab.toLowerCase() === 'supporting-document'}"
+        (click)="activeTab = 'supporting-document'">
+        <icon-user class="h-5 w-5" />
+        Supporting Documents
+      </a>
+    </div>
+    <div>
+      <div *ngIf="activeTab.toLowerCase() === 'home'">
+        <form [formGroup]="generalInfoForm"
+          class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+          <h6 class="mb-5 text-lg font-semibold">General Information</h6>
+          <div class="flex flex-col sm:flex-row">
+            <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
+
+              <!-- Firstname Field -->
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('firstname').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="firstname">Firstname</label>
+                <input id="firstname" type="text" placeholder="Firstname" class="form-input"
+                  formControlName="firstname" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('firstname').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('firstname').invalid && generalInfoForm.get('firstname').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter a valid firstname</p>
+                </ng-container>
+              </div>
+
+              <!-- Lastname Field -->
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('lastname').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="lastname">Lastname</label>
+                <input id="lastname" type="text" placeholder="Lastname" class="form-input" formControlName="lastname" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('lastname').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('lastname').invalid && generalInfoForm.get('lastname').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter a valid lastname</p>
+                </ng-container>
+              </div>
+
+              <!-- Email Field -->
+              <div [ngClass]="isSubmitForm ? generalInfoForm.get('email').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="Jimmy@gmail.com" class="form-input" autocomplete="off"
+                  formControlName="email" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('email').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('email').invalid && generalInfoForm.get('email').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter a valid email</p>
+                </ng-container>
+              </div>
+
+              <!-- Phone Field -->
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('contactNumber').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="contactNumber">Phone</label>
+                <input id="contactNumber" type="text" placeholder="9876543210" class="form-input"
+                  formControlName="contactNumber" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('contactNumber').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('contactNumber').invalid && generalInfoForm.get('contactNumber').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter a valid phone number</p>
+                </ng-container>
+              </div>
+
+              <!-- Password Field -->
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('password').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="password">Password</label>
+                <div class="password-input-container" style="position: relative;">
+                  <input id="password" [type]="showPassword ? 'text' : 'password'" placeholder="**********"
+                    class="form-input" formControlName="password" />
+                  <button type="button" class="toggle-password-btn" (click)="togglePasswordVisibility()"
+                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer;">
+                    <i [class]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+                  </button>
+                </div>
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('password').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('password').invalid && generalInfoForm.get('password').touched">
+                  <p class="mt-1 ml-2 text-danger">Password must be at least 6 characters long</p>
+                </ng-container>
+              </div>
+
+              <!-- Role Field -->
+              <div [ngClass]="isSubmitForm ? generalInfoForm.get('role').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="role">Role</label>
+                <select id="role" class="form-select text-white-dark" formControlName="role">
+                  <option value="user">User</option>
+                  <option value="employee">Employee</option>
+                  <option value="employee view">Employee View Only</option>
+                  <!-- <option value="admin">Admin</option> -->
+                </select>
+              </div>
+
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('birthdate').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="birthdate">Birth Date</label>
+                <input id="birthdate" type="date" class="form-input" formControlName="birthdate" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('birthdate').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('birthdate').invalid && generalInfoForm.get('birthdate').touched">
+                  <p class="mt-1 ml-2 text-danger">Please fill the Birth Date</p>
+                </ng-container>
+              </div>
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('anniversaryDate').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="anniversaryDate">Anniversary Date</label>
+                <input id="anniversaryDate" type="date" class="form-input" formControlName="anniversaryDate" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('anniversaryDate').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('anniversaryDate').invalid && generalInfoForm.get('anniversaryDate').touched">
+                  <p class="mt-1 ml-2 text-danger">Please fill the Anniversary Date</p>
+                </ng-container>
+              </div>
+
+              <!-- Address Field -->
+              <div [ngClass]="isSubmitForm ? generalInfoForm.get('address').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="address">Address</label>
+                <input id="address" type="text" placeholder="Address" class="form-input" formControlName="address" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('address').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('address').invalid && generalInfoForm.get('address').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter an address</p>
+                </ng-container>
+              </div>
+
+              <!-- City Field -->
+              <div [ngClass]="isSubmitForm ? generalInfoForm.get('city').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="city">City</label>
+                <input id="city" type="text" placeholder="City" class="form-input" formControlName="city" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('city').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('city').invalid && generalInfoForm.get('city').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter a city</p>
+                </ng-container>
+              </div>
+              <div></div>
+              <!-- Save Button -->
+              <div class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1">
+                <button type="button" class="btn btn-danger w-full gap-2" (click)="onCancel()">
+                  <icon-x class="shrink-0 ltr:mr-2 rtl:ml-2" />
+                  Cancel
+                </button>
+                <button type="button" class="btn btn-success w-full gap-2" (click)="onSave()">
+                  <icon-save class="shrink-0 ltr:mr-2 rtl:ml-2" />
+                  Create
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="activeTab.toLowerCase() === 'membership-detail'">
+        <form [formGroup]="membershipInfoForm"
+          class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+          <h6 class="mb-5 text-lg font-semibold">Package Information</h6>
+          <div class="flex flex-col gap-5">
+            <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
+              <div
+                [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('startDate').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="startDate">Start Date</label>
+                <input id="startDate" type="date" class="form-input" formControlName="startDate"
+                  (input)="calculateDays()" />
+                <ng-container *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('startDate').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitMembershipInfoForm && membershipInfoForm.get('startDate').invalid && membershipInfoForm.get('startDate').touched">
+                  <p class="mt-1 ml-2 text-danger">Please fill the Start Date</p>
+                </ng-container>
+              </div>
+              <div
+                [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('endDate').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="endDate">End Date</label>
+                <input id="endDate" type="date" class="form-input" formControlName="endDate"
+                  (input)="calculateDays()" />
+                <ng-container *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('endDate').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitMembershipInfoForm && membershipInfoForm.get('endDate').invalid && membershipInfoForm.get('endDate').touched">
+                  <p class="mt-1 ml-2 text-danger">Please fill the End Date</p>
+                </ng-container>
+              </div>
+
+              <div
+                [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('membership').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="membership">Package</label>
+                <select id="membership" class="form-select text-white-dark" formControlName="membership">
+                  <option value="ps">Please Select</option>
+                  <option value="Purple Membership">Purple Package</option>
+                  <option value="Red Membership">Red Package</option>
+                  <option value="White Membership">White Package</option>
+                  <option value="Blue Membership">Blue Package</option>
+                </select>
+              </div>
+
+              <div
+                [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('totalDaysAllowed').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="endDate">Total Days Allowed</label>
+                <input type="number" class="form-input" placeholder="totalDaysAllowed"
+                  formControlName="totalDaysAllowed" min="0" (input)="calculateDays()"/>
+                <ng-container *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('totalDaysAllowed').invalid">
+                  <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitMembershipInfoForm && membershipInfoForm.get('totalDaysAllowed').invalid && membershipInfoForm.get('totalDaysAllowed').touched">
+                  <p class="mt-1 text-danger">Please enter the Total Days Allowed</p>
+                </ng-container>
+              </div>
+            </div>
+            <h6 class="text-lg font-semibold">Usage History Information</h6>
+            <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
+
+              <div
+                [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('destinationId').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="destinationId">Destination</label>
+                <select id="destinationId" class="form-select text-white-dark" formControlName="destinationId" (change)="onDestinationChange($event)">
+                  <option value="ps">Please Select</option>
+                  <option *ngFor="let item of destinations" value="{{item?._id}}">{{item?.name}}({{item?.location}})
+                  </option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div *ngIf="isOtherDestinationSelected"
+                [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('manualDestination').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="manualDestination">Other Destination</label>
+                <input type="text" class="form-input" placeholder="Enter other destination" formControlName="manualDestination" />
+                <ng-container *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('manualDestination').invalid">
+                  <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitMembershipInfoForm && membershipInfoForm.get('manualDestination').invalid && membershipInfoForm.get('manualDestination').touched">
+                  <p class="mt-1 text-danger">Please enter the Other Destination</p>
+                </ng-container>
+              </div>
+              <div *ngIf="isOtherDestinationSelected"
+                [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('manualDestinationLocation').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="manualDestinationLocation">Other Destination</label>
+                <input type="text" class="form-input" placeholder="Enter other destination" formControlName="manualDestinationLocation" />
+                <ng-container *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('manualDestinationLocation').invalid">
+                  <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitMembershipInfoForm && membershipInfoForm.get('manualDestinationLocation').invalid && membershipInfoForm.get('manualDestinationLocation').touched">
+                  <p class="mt-1 text-danger">Please enter the Other Destination Location</p>
+                </ng-container>
+              </div>
+
+              <div
+                [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('daysUsed').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="daysUsed">Days Used</label>
+                <input type="number" class="form-input" placeholder="Days Used" formControlName="daysUsed" min="0"
+                  (input)="calculateDays()" />
+                <ng-container *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('daysUsed').invalid">
+                  <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitMembershipInfoForm && membershipInfoForm.get('daysUsed').invalid && membershipInfoForm.get('daysUsed').touched">
+                  <p class="mt-1 text-danger">Please enter the Days Used</p>
+                </ng-container>
+              </div>
+
+              <div
+                [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('daysLeft').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="daysLeft">Days Left</label>
+                <input type="number" class="form-input" placeholder="Days Left" formControlName="daysLeft" min="0" />
+                <ng-container *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('daysLeft').invalid">
+                  <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitMembershipInfoForm && membershipInfoForm.get('daysLeft').invalid && membershipInfoForm.get('daysLeft').touched">
+                  <p class="mt-1 text-danger">Please enter the Days Left</p>
+                </ng-container>
+              </div>
+
+
+
+              <div></div>
+              <div></div>
+              <!-- Save Button -->
+              <div class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1">
+                <button type="button" class="btn btn-danger w-full gap-2" (click)="onCancel()">
+                  <icon-x class="shrink-0 ltr:mr-2 rtl:ml-2" />
+                  Cancel
+                </button>
+                <button type="button" class="btn btn-success w-full gap-2" (click)="onMembershipSave()">
+                  <icon-save class="shrink-0 ltr:mr-2 rtl:ml-2" />
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div>
+          <div class="panel border-[#e0e6ed] px-0 pb-1.5 dark:border-[#1b2e4b]">
+            <div class="mb-2 ml-2 flex items-center justify-between">
+              <h5 class="text-lg ml-2 font-semibold dark:text-white-light">Usage History</h5>
+            </div>
+            <div class="datatable invoice-table">
+
+              <ng-datatable #datatable [rows]="items" [columns]="cols" [loading]="loading" [totalRows]="total_rows"
+                [isServerMode]="true" [pageSize]="params.pagesize" (changeServer)="changeServer($event)"
+                skin="whitespace-nowrap bh-table-hover"
+                firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+                lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg> '
+                previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+                nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'>
+                <ng-template slot="destination" let-value="data">
+                  <div class="flex items-center font-semibold">
+                    {{ value?.destinationName ? value?.destinationName : '--' }}
+                  </div>
+                </ng-template>
+                <ng-template slot="location" let-value="data">
+                  <div class="flex items-center font-semibold">
+                    {{ value?.destinationLocation ? value?.destinationLocation : '--' }}
+                  </div>
+                </ng-template>
+
+              </ng-datatable>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div *ngIf="activeTab.toLowerCase() === 'supporting-document'" class="switch">
+        <div class="rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+          <div data-upload-id="mySecondImage" class="custom-file-container">
+            <h6 class="mb-5 text-lg font-semibold">Supporting Document Information</h6>
+            <div class="label-container">
+              <label>{{this.docData?.public_id ? 'Uploaded Document' : 'Upload Document'}}</label>
+            </div>
+            <label class="input-container" *ngIf="!this.docData?.public_id">
+              <input accept=".pdf" aria-label="Choose File" class="input-hidden" (change)="onImageChange($event)"
+                id="file-upload-with-preview-mySecondImage" type="file" />
+              <span class="input-visible">Choose file...<span class="browse-button">Browse</span></span>
+            </label>
+            <div class="image-preview" *ngIf="imagePreviews.length < 1"
+              style="background-image: url('../../../../../assets/admin/images/file-preview.svg');">
+            </div>
+            <div class="image-preview" *ngIf="imagePreviews.length > 0">
+              <div *ngFor="let preview of imagePreviews; let i = index" class="image-preview-item"
+                style="background-image: url({{preview}}); ">
+        
+                <span class="image-preview-item-clear" (click)="removeImage(i)">
+                  <span class="image-preview-item-clear-icon" data-upload-name="red.jpg:upload:02d900ca7335d">
+                    ×
+                  </span>
+                </span>
+        
+              </div>
+            </div>
+          </div>
+        
+          <!-- Save Button -->
+          <div class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1 justify-center lg:justify-end " *ngIf="!this.docData?.public_id">
+            <button type="button" class="btn btn-danger sm:w-full lg:w-1/4 gap-2" (click)="onCancel()">
+              <icon-x class="shrink-0 ltr:mr-2 rtl:ml-2" />
+              Cancel
+            </button>
+            <button type="button" class="btn btn-success sm:w-full lg:w-1/4 gap-2" (click)="onAgreementSave()">
+              <icon-save class="shrink-0 ltr:mr-2 rtl:ml-2" />
+              Upload
+            </button>
+          </div>
+          <div class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1 justify-center lg:justify-end " *ngIf="this.docData?.public_id">
+            <a type="button" class="btn btn-success sm:w-full lg:w-1/4 gap-2" href="{{this.docData?.url}}">
+              <icon-save class="shrink-0 ltr:mr-2 rtl:ml-2" />
+              Download
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

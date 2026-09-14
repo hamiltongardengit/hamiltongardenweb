@@ -1,0 +1,38 @@
+<div class="testimonial-area py-120">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 mx-auto">
+        <div class="site-heading text-center">
+          <span class="site-title-tagline">Testimonials</span>
+          <h2 class="site-title">What Clients Say</h2>
+          <p>
+            Don’t just take our word for it – hear from our happy clients! At Hamilton Garden Inn & Suites, we take
+            pride in delivering unforgettable travel experiences. Here’s what some of our travelers have to say about
+            their journeys with us:
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <!-- Loop through testimonials -->
+      <div class="col-md-6 col-lg-4" *ngFor="let testimonial of testimonials">
+        <div class="testimonial-single">
+          <div class="testimonial-quote">
+            <span class="testimonial-quote-icon"><i class="fal fa-quote-right"></i></span>
+            <div class="testimonial-rate">
+              <ng-container *ngFor="let star of generateStars(testimonial.rating)">
+                <i class="fas fa-star"></i>
+              </ng-container>
+            </div>
+            <p>{{ testimonial.review }}</p>
+          </div>
+          <div class="testimonial-content">
+            <div class="testimonial-author-info">
+              <h4>{{ testimonial.name }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

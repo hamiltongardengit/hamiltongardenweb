@@ -1,0 +1,7 @@
+.exception-error{
+    z-index: 99999;
+    font-family: "Nunito", sans-serif;
+}
+.exception-error > span{
+    margin-right: 1rem;
+}

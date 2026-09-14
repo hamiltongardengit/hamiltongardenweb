@@ -1,0 +1,12 @@
+<app-exception-error *ngIf="(exceptionService.notification$ | async) as message" [message]="message"></app-exception-error>
+<ng-container *ngIf="showHeaderFooter">
+    <app-header></app-header>
+</ng-container>
+
+<app-loading></app-loading> <!-- Loading component -->
+
+<router-outlet></router-outlet>
+
+<ng-container *ngIf="showHeaderFooter">
+    <app-footer></app-footer>
+</ng-container>
