@@ -37,15 +37,34 @@ export class ListComponent implements OnInit {
   }
 
   getAllUsers(page?) {
-    this.loading = true;
-    this.commonService.postRequest(this.params, AdminAPI.get_all_users).subscribe((res: any) => {
-      if (res) {
-        this.items = res?.users;
-        this.total_rows = res?.pagination?.total;
+  this.loading = true;
+
+  this.commonService
+    .postRequest(this.params, AdminAPI.get_all_users)
+    .subscribe({
+      next: (res: any) => {
+        if (res) {
+          this.items = (res?.users || []).map((user: any) => ({
+            ...user,
+            role: Array.isArray(user.role)
+              ? user.role[0]
+              : user.role ||
+                (Array.isArray(user.roles) ? user.roles[0] : user.roles) ||
+                'user'
+          }));
+
+          this.total_rows = res?.pagination?.total || 0;
+        }
+
+        this.loading = false;
+      },
+
+      error: (err) => {
+        console.error('Get users error:', err);
         this.loading = false;
       }
-    })
-  }
+    });
+}
 
   filterUsers() {
     clearTimeout(this.timer);
