@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.*
+config/env
+config/*.env
+*.zip
+dist/
+coverage/
+HamiltonServer/config/env
