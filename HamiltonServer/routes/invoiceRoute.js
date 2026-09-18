@@ -8,12 +8,14 @@ const {
     getInvoiceById,
     updateInvoice,
     deleteInvoice,
+    exportInvoicesToCSV,
+    getAllInvoicesByLatestExpiry,
 } = require('../controllers/invoiceController');
 const { processAllInvoices } = require('../services/batchUploadAndCleanup');
 
 router.post('/admin/invoices', isAuthenticatedUser, authorizedRoles('admin','employee'), createInvoice);
-router.post('/admin/get_all_invoices', isAuthenticatedUser, authorizedRoles('admin','employee'), getInvoices);
-router.get('/admin/invoices/:id', isAuthenticatedUser, authorizedRoles('admin','employee'), getInvoiceById);
+router.post('/admin/get_all_invoices', isAuthenticatedUser, authorizedRoles('admin', 'employee', 'employee_view'), getInvoices);
+router.get('/admin/invoices/:id', isAuthenticatedUser, authorizedRoles('admin', 'employee', 'employee_view'), getInvoiceById);
 router.put('/admin/invoices/:id', isAuthenticatedUser, authorizedRoles('admin','employee'), updateInvoice);
 router.delete('/admin/invoices/:id', isAuthenticatedUser, authorizedRoles('admin','employee'), deleteInvoice);
 
@@ -27,5 +29,8 @@ router.get('/admin/process-invoices', isAuthenticatedUser, authorizedRoles('admi
         res.status(500).json({ success: false, message: 'Failed to process invoices.' });
     }
 });
+
+router.get('/admin/export-invoices', isAuthenticatedUser, authorizedRoles('admin', 'employee', 'employee_view'), exportInvoicesToCSV);
+router.post('/admin/get-expiring-memberships', isAuthenticatedUser, authorizedRoles('admin', 'employee', 'employee_view'), getAllInvoicesByLatestExpiry);
 
 module.exports = router;

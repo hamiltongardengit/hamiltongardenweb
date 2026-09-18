@@ -1,5 +1,5 @@
-    
-    //  Creating Token and Saving it into Cookkie
+const { collectUIPermissions } = require("../middleware/permissions");
+//  Creating Token and Saving it into Cookkie
 const sendToken = (user, statusCode, res) => {
     const token = user.getJWTToken();
 
@@ -12,7 +12,8 @@ const sendToken = (user, statusCode, res) => {
     res.status(statusCode).cookie('token', token, options).json({
         success: true,
         user,
-        token
+        token,
+        permissions: collectUIPermissions(user.roles)
     })
 }
 

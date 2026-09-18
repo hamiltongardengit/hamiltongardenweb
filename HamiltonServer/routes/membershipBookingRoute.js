@@ -4,6 +4,6 @@ const { isAuthenticatedUser, authorizedRoles } = require("../middleware/auth");
 const router = express.Router();
 
 router.route("/submit-membership-booking").post(createMembershipBooking);
-router.route("/admin/get-all-membership-booking").post(isAuthenticatedUser, authorizedRoles("admin", "employee"), getAllMembershipBuyList);
+router.route("/admin/get-all-membership-booking").post(isAuthenticatedUser, authorizedRoles("admin", "employee", 'employee_view'), getAllMembershipBuyList);
 
 module.exports = router;

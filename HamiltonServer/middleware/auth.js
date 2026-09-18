@@ -2,6 +2,8 @@ const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncErrors = require("./catchAsyncErrors");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
+const { permissions } = require("./permissions");
+
 
 exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
     // const { token } = req.cookies;       // using cookie
@@ -19,16 +21,44 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
         throw new ErrorHandler("User not found", 404);
     }
 
+
+
     next();
 });
 
-exports.authorizedRoles = (...roles) => {
+exports.authorizedRoles = (...allowedRoles) => {
     return (req, res, next) => {
-        // const role = req.user.role;     // using cookie
-        const role = req.headers['role'];
-        if (!roles.includes(role)) {
-            return next( new ErrorHandler(`Role: ${role} is not allowed to access this resource.`, 403));
+        const userRoles = req.user.roles || [];
+
+        // Check if user has any matching role
+        const hasRole = userRoles.some(role => allowedRoles.includes(role));
+
+        if (!hasRole) {
+            return next(new ErrorHandler("Access denied", 403));
         }
+
         next();
-    }
-}
+    };
+};
+
+exports.checkPermission = (action) => {
+    return (req, res, next) => {
+        const userRoles = (req.user.roles || []).map(r => r.toLowerCase()); // normalize to lowercase
+
+        let allowedActions = [];
+        userRoles.forEach(role => {
+            if (permissions[role]) {
+                allowedActions = [...allowedActions, ...permissions[role].api];
+            }
+        });
+
+        if (allowedActions.includes("*")) return next();
+
+        if (!allowedActions.includes(action)) {
+            return next(new ErrorHandler(`You do not have permission for ${action}`, 403));
+        }
+
+        next();
+    };
+};
+

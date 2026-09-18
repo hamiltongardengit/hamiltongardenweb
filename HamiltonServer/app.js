@@ -8,6 +8,7 @@ const errorMiddleware = require("./middleware/error");
 
 // Define the allowed origins
 const allowedOrigins = [
+    'http://localhost:4200',
 ];
 
 // CORS Options

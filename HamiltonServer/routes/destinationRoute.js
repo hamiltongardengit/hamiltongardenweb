@@ -38,7 +38,7 @@ router.route('/reviews')
 router.route('/admin/update-review-status')
     .put(isAuthenticatedUser, authorizedRoles('admin', 'employee'), updateReviewStatus);
 router.route('/admin/get-reviews-by-status')
-    .post(isAuthenticatedUser, authorizedRoles('admin', 'employee'), getReviewsByStatus);
+    .post(isAuthenticatedUser, authorizedRoles('admin', 'employee', 'employee_view'), getReviewsByStatus);
 
 
 module.exports = router;

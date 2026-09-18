@@ -141,6 +141,32 @@ const invoiceSchema = new mongoose.Schema({
             default: Date.now,
         }
     },
+    membership: {
+        startDate: {
+            type: Date,
+            required: true,
+            default: Date.now,
+        },
+        expiryDate: {
+            type: Date,
+            required: true,
+        },
+        renewalStatus: {
+            type: String,
+            enum: ["Active", "Expired", "Renewed", "Pending Renewal"],
+            default: "Active",
+        },
+        remindersSent: [
+            {
+                reminderDate: Date,
+                type: {
+                    type: String,
+                    enum: ["Email", "SMS", "WhatsApp"],
+                    default: "Email",
+                },
+            },
+        ],
+    },    
     createdAt: {
         type: Date,
         default: Date.now,

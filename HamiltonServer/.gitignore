@@ -12,10 +12,6 @@ npm-debug.log
 yarn-error.log
 
 # misc
-/config/config.env
-/config/cheats.txt
-/NOTES.txt
-*.env
 
 # IDEs and editors
 .idea/

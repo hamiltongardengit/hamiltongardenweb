@@ -4,6 +4,6 @@ const { createContactMessage, getAllContactMessages } = require("../controllers/
 const router = express.Router();
 
 router.route("/contact").post(createContactMessage);
-router.route("/admin/contacts").get(isAuthenticatedUser, authorizedRoles('admin', 'employee'), getAllContactMessages);
+router.route("/admin/contacts").get(isAuthenticatedUser, authorizedRoles('admin', 'employee', 'employee_view'), getAllContactMessages);
 
 module.exports = router;

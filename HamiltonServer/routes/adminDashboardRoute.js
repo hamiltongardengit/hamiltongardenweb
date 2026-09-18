@@ -4,6 +4,6 @@ const { isAuthenticatedUser, authorizedRoles } = require("../middleware/auth");
 
 const router = express.Router();
 
-router.route("/admin/dashboard").get(isAuthenticatedUser, authorizedRoles("admin", 'employee'), getAdminDashboardData);
+router.route("/admin/dashboard").get(isAuthenticatedUser, authorizedRoles("admin", 'employee', 'employee_view'), getAdminDashboardData);
 
 module.exports = router;

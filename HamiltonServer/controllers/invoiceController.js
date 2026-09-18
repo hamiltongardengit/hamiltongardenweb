@@ -9,6 +9,7 @@ const FormattingUtils = require('../utils/formattingUtils');
 const { deleteFilesFromS3 } = require('../services/fileUploadService');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { processAllInvoices } = require('../services/batchUploadAndCleanup');
+const sendEmail = require("../utils/nodemailer");
 
 // Create Invoice
 exports.createInvoice = catchAsyncErrors(async (req, res, next) => {
@@ -76,7 +77,6 @@ exports.getInvoiceById = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Update Invoice
-// Update Invoice
 exports.updateInvoice = catchAsyncErrors(async (req, res, next) => {
     // Find the invoice by ID
     const invoice = await Invoice.findById(req.params.id);
@@ -121,8 +121,6 @@ exports.updateInvoice = catchAsyncErrors(async (req, res, next) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 });
-
-
 
 // Delete Invoice
 exports.deleteInvoice = catchAsyncErrors(async (req, res, next) => {
@@ -200,9 +198,122 @@ const generateAndUploadPDF = async (invoice) => {
     }
 };
 
+const CSVExportUtils = require('../utils/csvExportUtils');
+const moment = require('moment'); // For date formatting
 
+// Export Invoices to CSV (All Invoices or invoiceId-Specific)
+exports.exportInvoicesToCSV = catchAsyncErrors(async (req, res, next) => {
+    try {
+        // Extract the userId query parameter
+        const { invoiceId } = req.query;
 
+        // Filter invoices if invoiceId is provided
+        let query = {};
+        if (invoiceId) {
+            query['_id'] = invoiceId; // Filter by invoiceId (assuming customer has a invoiceId field)
+        }
 
+        // Fetch invoices based on the query (all or filtered by invoiceId)
+        const invoices = await Invoice.find(query);
 
+        // Define the CSV fields to export
+        const fields = [
+            { label: 'Invoice Number', value: 'invoiceNumber' },
+            { label: 'Customer Name', value: 'customer.name' },
+            { label: 'Customer Email', value: 'customer.email' },
+            {
+                label: 'Invoice Date',
+                value: (row) => moment(row.invoiceDate).format('DD-MMM-YYYY') // Format the date
+            },
+            { label: 'Subtotal', value: 'subtotal' },
+            { label: 'Tax Rate', value: 'taxRate' },
+            { label: 'Total Tax Amount', value: 'totalTaxAmount' },
+            { label: 'Discount Amount', value: 'discountAmount' },
+            { label: 'Total Amount', value: 'totalAmount' },
+            { label: 'Payment Status', value: 'paymentStatus' },
+        ];
+
+        // Export the invoices to CSV
+        CSVExportUtils.exportToCSV(invoices, fields, 'invoices.csv', res);
+    } catch (error) {
+        console.error('Error exporting invoices:', error.message);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
+
+// Send Membership Expiry Reminders
+exports.sendExpiryReminders = catchAsyncErrors(async (req, res, next) => {
+    const today = new Date();
+    const nextWeek = new Date();
+    nextWeek.setDate(today.getDate() + 7);
+
+    // Find memberships expiring within next 7 days
+    const expiringMemberships = await Invoice.find({
+        "membership.expiryDate": { $gte: today, $lte: nextWeek },
+        "membership.renewalStatus": "Active"
+    });
+
+    for (const invoice of expiringMemberships) {
+        const { email, name } = invoice.customer;
+
+        await sendEmail({
+            email,
+            subject: "Membership Expiry Reminder",
+            message: `Hi ${name}, your membership (No. ${invoice.membershipNumber}) is expiring on ${invoice.membership.expiryDate.toDateString()}. Please renew on time to continue enjoying benefits.`,
+        });
+
+        invoice.membership.remindersSent.push({
+            reminderDate: today,
+            type: "Email",
+        });
+
+        await invoice.save({ validateBeforeSave: false });
+    }
+
+    res.status(200).json({
+        success: true,
+        count: expiringMemberships.length,
+        message: "Reminders sent successfully",
+    });
+});
+
+// Get Expiring Memberships (date-wise, latest first)
+exports.getAllInvoicesByLatestExpiry = catchAsyncErrors(async (req, res, next) => {
+    const resultPerPage = Number(req.body.pagesize) || 10; // Items per page
+    const currentPage = Number(req.body.current_page) || 1; // Current page
+
+    // Filter invoices with expiryDate present
+    const filter = { "membership.expiryDate": { $exists: true } };
+
+    // Count total filtered invoices
+    const invoiceCount = await Invoice.countDocuments(filter);
+
+    // Query invoices, sorted by expiryDate (latest first)
+    const apiFeatures = new ApiFeatures(
+        Invoice.find(filter)
+            .sort({ "membership.expiryDate": 1 }) // Descending
+            .select("membership membershipNumber customer invoiceNumber invoiceType"),
+        req.body
+    ).search()
+    .filter()
+    .pagination(resultPerPage);
+
+    const invoices = await apiFeatures.query;
+
+    const total_pages = Math.ceil(invoiceCount / resultPerPage);
+
+    res.status(200).json({
+        success: true,
+        invoices,
+        pagination: {
+            current_page: currentPage,
+            first_page: 1,
+            last_page: total_pages,
+            per_page: resultPerPage,
+            total: invoiceCount,
+            total_pages
+        }
+    });
+});
 
 

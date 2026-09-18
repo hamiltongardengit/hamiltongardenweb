@@ -12,7 +12,7 @@ const { deleteFilesFromS3, uploadPdfS3 } = require('../services/fileUploadServic
 
 // Register User
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-    const { firstname, lastname, email, contactNumber, password, role, address, city, state, zip } =
+    const { firstname, lastname, email, contactNumber, password, role, address, city, state, zip, birthdate, anniversaryDate } =
         req.body;
 
     const createdBy = req.user ? req.user._id : null;
@@ -28,6 +28,8 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
         city,
         state,
         zip,
+        birthdate,
+        anniversaryDate,
         avatar: {
             public_id: "avatar sample id",
             url: "avatar sample url",
@@ -58,8 +60,50 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Invalid Email or Password", 401));
     }
 
-    user.password = undefined;
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
+    user.otp = otp;
+    user.otpExpire = Date.now() + 10 * 60 * 1000; // 5 minutes expiry
+    await user.save({ validateBeforeSave: false });
+
+    await sendEmail(
+        user.email,
+        "Login OTP",
+        `Your Login OTP for Hamilton Garden Inn & Suites is: ${otp}`
+    );
+
+    res.status(200).json({
+        success: true,
+        message: "OTP sent successfully. Please verify to continue.",
+        otp,
+        userId: user._id,
+    });
+});
+
+// Login Step 2: Verify OTP
+exports.verifyOtp = catchAsyncErrors(async (req, res, next) => {
+    const { userId, otp } = req.body;
+
+    if (!userId || !otp) {
+        return next(new ErrorHandler("User ID and OTP required", 400));
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+    }
+
+    if (!user.otp || user.otp !== otp || user.otpExpire < Date.now()) {
+        return next(new ErrorHandler("Invalid or expired OTP", 400));
+    }
+
+    // Clear OTP after successful verification
+    user.otp = undefined;
+    user.otpExpire = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    // send JWT Token
     sendToken(user, 200, res);
 });
 
@@ -80,9 +124,42 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 exports.getAllUsers = catchAsyncErrors(async (req, res) => {
     const resultPerPage = Number(req.body.pagesize) || 10; // Number of items per page
     const currentPage = Number(req.body.current_page) || 1; // Current page
-    const userCount = await User.countDocuments(); // Total number of documents
+    const countQuery = User.find({ 
+        $and: [
+            {
+                $or: [
+                    { role: { $in: ["user"] } },
+                    { roles: { $in: ["user"] } }
+                ]
+            },
+            {
+                $or: [
+                    { roles: { $exists: false } },
+                    { roles: { $not: { $in: ["admin", "employee", "employee_view", "tbo_admin"] } } }
+                ]
+            }
+        ]
+    });
+    
+    const countFeatures = new ApiFeatures(countQuery, req.body).search().filter();
+    const userCount = await countFeatures.query.countDocuments();
 
-    const apiFeatures = new ApiFeatures(User.find(), req.body)
+    const apiFeatures = new ApiFeatures(User.find({ 
+        $and: [
+            {
+                $or: [
+                    { role: { $in: ["user"] } },
+                    { roles: { $in: ["user"] } }
+                ]
+            },
+            {
+                $or: [
+                    { roles: { $exists: false } },
+                    { roles: { $not: { $in: ["admin", "employee", "employee_view", "tbo_admin"] } } }
+                ]
+            }
+        ]
+    }), req.body)
         .search()
         .filter()
         .sort()
@@ -142,7 +219,14 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 // update User Profile
 exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     // Extract fields to update
-    const { password, ...updateFields } = req.body;
+    let { password, ...updateFields } = req.body;
+
+    // Clean empty strings
+    Object.keys(updateFields).forEach(key => {
+        if (updateFields[key] === '') {
+            delete updateFields[key];
+        }
+    });
 
     // Check if a new password is provided
     if (password) {
@@ -173,9 +257,11 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 
 // Update User Role (Admin)
 exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
-    const newUserData = {
-        role: req.body.role,
-    };
+    const { role, roles } = req.body;
+    const newUserData = {};
+    
+    if (role) newUserData.role = role;
+    if (roles) newUserData.roles = roles;
 
     let user = await User.findById(req.params.id);
 
@@ -560,3 +646,190 @@ exports.deleteAgreement = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Failed to delete agreement', 500));
     }
 });
+
+// Function to accept agreement
+exports.acceptAgreement = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+        return next(new ErrorHandler('User not found', 404));
+    }
+    user.agreementAccepted = true;
+    user.agreementAcceptedAt = Date.now();
+    await user.save();
+    res.status(200).json({
+        success: true,
+        message: 'Agreement accepted successfully',
+    });
+});
+
+// Create Employee (Admin only)
+exports.createEmployee = catchAsyncErrors(async (req, res, next) => {
+    const {
+        firstname, lastname, email, contactNumber, password,
+        address, city, state, zip, birthdate, anniversaryDate,
+        employmentType, designation, department, salaryStructure, commissionRate, role
+    } = req.body;
+
+    const createdBy = req.user ? req.user._id : null;
+
+    const employee = await User.create({
+        firstname,
+        lastname,
+        email,
+        contactNumber,
+        password,
+        role: role || "employee", // default employee
+        address,
+        city,
+        state,
+        zip,
+        birthdate,
+        anniversaryDate,
+        employmentType,
+        designation,
+        department,
+        salaryStructure,
+        commissionRate,
+        createdBy,
+        avatar: {
+            public_id: "avatar sample id",
+            url: "avatar sample url",
+        }
+    });
+
+    res.status(201).json({
+        success: true,
+        employee
+    });
+});
+// Get All Employees (Admin)
+exports.getAllEmployees = catchAsyncErrors(async (req, res, next) => {
+    const resultPerPage = Number(req.body.pagesize) || 10;
+    const currentPage = Number(req.body.current_page) || 1;
+
+    const countQuery = User.find({ 
+        $and: [
+            {
+                $or: [
+                    { role: { $in: ["employee", "employee_view"] } },
+                    { roles: { $in: ["employee", "employee_view", "tbo_admin"] } }
+                ]
+            },
+            {
+                $or: [
+                    { roles: { $exists: false } },
+                    { roles: { $not: { $in: ["user"] } } }
+                ]
+            }
+        ]
+    });
+    
+    const countFeatures = new ApiFeatures(countQuery, req.body).search().filter();
+    const employeeCount = await countFeatures.query.countDocuments();
+
+    const apiFeatures = new ApiFeatures(
+        User.find({ 
+            $and: [
+                {
+                    $or: [
+                        { role: { $in: ["employee", "employee_view"] } },
+                        { roles: { $in: ["employee", "employee_view", "tbo_admin"] } }
+                    ]
+                },
+                {
+                    $or: [
+                        { roles: { $exists: false } },
+                        { roles: { $not: { $in: ["user"] } } }
+                    ]
+                }
+            ]
+        })
+            .select("-password -resetPasswordToken -resetPasswordExpire -usages")
+            .populate("linkedCustomers", "firstname lastname email contactNumber"),
+        req.body
+    )
+        .search()
+        .filter()
+        .sort()
+        .pagination(resultPerPage);
+
+    const employees = await apiFeatures.query;
+
+    const total_pages = Math.ceil(employeeCount / resultPerPage);
+
+    res.status(200).json({
+        success: true,
+        employees,
+        pagination: {
+            current_page: currentPage,
+            per_page: resultPerPage,
+            total: employeeCount,
+            total_pages
+        }
+    });
+});
+// Update Employee (Admin)
+exports.updateEmployee = catchAsyncErrors(async (req, res, next) => {
+    const employee = await User.findById(req.params.id);
+
+    if (!employee || !employee.roles?.some(r => ["employee", "employee_view", "tbo_admin"].includes(r))) {
+        return next(new ErrorHandler("Employee not found", 404));
+    }
+
+    const updateFields = { ...req.body };
+
+    const updatedEmployee = await User.findByIdAndUpdate(
+        req.params.id,
+        updateFields,
+        { new: true, runValidators: true, useFindAndModify: false }
+    );
+
+    res.status(200).json({
+        success: true,
+        employee: updatedEmployee
+    });
+});
+// Delete Employee (Admin)
+exports.deleteEmployee = catchAsyncErrors(async (req, res, next) => {
+    const employee = await User.findById(req.params.id);
+
+    if (!employee || !["employee", "employee_view", "tbo_admin"].includes(employee.role)) {
+        return next(new ErrorHandler("Employee not found", 404));
+    }
+
+    await employee.deleteOne();
+
+    res.status(200).json({
+        success: true,
+        message: "Employee deleted successfully"
+    });
+});
+// Assign Customers to Employee (Admin)
+exports.assignCustomersToEmployee = catchAsyncErrors(async (req, res, next) => {
+    const { employeeId, customerIds } = req.body;
+
+    const employee = await User.findById(employeeId);
+    if (!employee || !["employee"].includes(employee.role)) {
+        return next(new ErrorHandler("Employee not found", 404));
+    }
+
+    // Add customer references to employee
+    employee.linkedCustomers = customerIds;
+    await employee.save();
+
+    // Update assignedEmployee field for each customer
+    await User.updateMany(
+        { _id: { $in: customerIds } },
+        { assignedEmployee: employeeId }
+    );
+
+    res.status(200).json({
+        success: true,
+        message: "Customers assigned to employee successfully",
+        employee
+    });
+});
+
+
+
+

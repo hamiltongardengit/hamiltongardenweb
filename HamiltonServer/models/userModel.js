@@ -60,12 +60,17 @@ const userSchema = new mongoose.Schema({
         }
     },
     role: {
-        type: String,
+        type: [String],
         enum: {
-            values: ['user', 'admin', 'employee'],
+            values: ['user', 'admin', 'employee', 'employee view'],
             message: 'Role must be either User, Admin, or Employee.'
         },
-        default: 'user'
+        default: ['user']
+    },
+    roles: {
+        type: [String],
+        enum: ['user', 'admin', 'employee', 'employee_view', "tbo_admin", "temp_admin", "super_admin"],
+        default: ['user']
     },
     usages: [
         {
@@ -87,6 +92,72 @@ const userSchema = new mongoose.Schema({
             default: Date.now,
         }
     },
+    birthdate: {
+        type: Date,
+        required: true,
+    },
+    anniversaryDate: {
+        type: Date,
+    },
+    // Employee Specific Fields
+    dateOfJoining: {
+        type: Date,
+    },
+    status: {
+        type: String,
+        enum: ["Active", "Inactive", "Terminated", "On-Leave"],
+        default: "Active",
+      },
+    employmentType: {
+        type: String,
+        enum: ["Salary", "Commission"],
+        default: "Salary",
+    },
+    designation: {
+        type: String,
+        maxlength: [50, "Designation cannot exceed 50 characters."],
+    },
+    department: {
+        type: String,
+        maxlength: [50, "Department cannot exceed 50 characters."],
+    },
+    salaryStructure: {
+        type: Number, // monthly salary (if applicable)
+        default: 0,
+    },
+    commissionRate: {
+        type: Number, // percentage (if applicable)
+        default: 0,
+    },
+    linkedCustomers: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: "User", // link customers to this employee
+        }
+    ],
+    // Customer Specific Fields
+    assignedEmployee: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User", // which employee is assigned
+    },    
+    membershipExpiryDate: {
+        type: Date, // for membership reminder system
+    },
+    visaApplications: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: "VisaApplication", // separate collection for visa applications
+        }
+    ],
+    agreementAccepted: {
+        type: Boolean,
+        default: false,
+    },
+    agreementAcceptedAt: {
+        type: Date,
+    },    
+    otp: String,
+    otpExpire: Date,
     createdAt: {
         type: Date,
         default: Date.now,
@@ -135,5 +206,6 @@ userSchema.methods.getResetPasswordToken = function () {
 
     return resetToken;
 };
+userSchema.index({ birthdate: 1, anniversaryDate: 1 });
 
 module.exports = mongoose.model("User", userSchema);
