@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "hamilton-client": {
+    "HamiltonClient": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -11,11 +11,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/hamilton-client",
+            "outputPath": "dist",
             "index": "src/index.html",
-            "main": "src/main.ts",
+            "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -23,37 +23,43 @@
             "assets": [
               "src/assets"
             ],
-           "styles": [
-  "src/assets/clientTemplate/css/bootstrap.min.css",
-  "src/assets/clientTemplate/css/fontawesome.min.css",
-  "src/assets/clientTemplate/css/animate.min.css",
-  "src/assets/clientTemplate/css/responsive.css",
-  "src/assets/clientTemplate/css/style.css",
-  "src/assets/admin/css/animate.css",
-  "src/assets/admin/css/app.css",
-  "src/assets/admin/css/sweetalert.css",
-  "src/assets/admin/css/tailwind.css",
-  "src/styles.css"
-],
-            "scripts": []
+            "styles": [
+              "src/assets/clientTemplate/css/bootstrap.min.css",
+              "src/assets/clientTemplate/css/fontawesome.min.css",
+              "src/assets/admin/css/app.css",
+              "src/assets/clientTemplate/css/style.css",
+              "src/styles.css"
+            ],
+            "scripts": [
+              "src/assets/clientTemplate/js/bootstrap.bundle.min.js"
+            ]
           },
           "configurations": {
-            "production": {
+            "prod": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "10kb",
-                  "maximumError": "20kb"
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputPath": "dist",
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "aot": true,
+              "extractLicenses": true,
+              "allowedCommonJsDependencies": [
+                "sweetalert2"
+              ]
             },
             "dev": {
+              "outputPath": "dist",
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -64,11 +70,11 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": {
-              "browserTarget": "hamilton-client:build:production"
+            "prod": {
+              "buildTarget": "HamiltonClient:build:prod"
             },
             "dev": {
-              "browserTarget": "hamilton-client:build:dev"
+              "buildTarget": "HamiltonClient:build:dev"
             }
           },
           "defaultConfiguration": "dev"
@@ -76,13 +82,12 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "hamilton-client:build"
+            "buildTarget": "HamiltonClient:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
             "polyfills": [
               "zone.js",
               "zone.js/testing"
@@ -99,8 +104,5 @@
         }
       }
     }
-  },
-  "cli": {
-    "analytics": false
   }
 }
