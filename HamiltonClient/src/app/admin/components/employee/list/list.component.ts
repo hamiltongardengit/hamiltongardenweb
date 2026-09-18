@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AdminAPI } from '../../../../../services/api-enum/api.enum';
-import { CommonService } from '../../../../../services/common.service';
 import { AuthService } from '../../../../../services/auth.service';
+import { CommonService } from '../../../../../services/common.service';
 
 @Component({
   selector: 'app-list',
@@ -11,7 +11,7 @@ import { AuthService } from '../../../../../services/auth.service';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-  @ViewChild('datatable') datatable: any;
+@ViewChild('datatable') datatable: any;
   search = '';
   cols = [
     { field: 'name', title: 'Name' },
@@ -33,14 +33,14 @@ export class ListComponent implements OnInit {
   constructor(private commonService: CommonService, private router: Router, public auth: AuthService) { }
 
   ngOnInit() {
-    this.getAllUsers();
+    this.getAllEmployee();
   }
 
-  getAllUsers(page?) {
+  getAllEmployee(page?) {
     this.loading = true;
-    this.commonService.postRequest(this.params, AdminAPI.get_all_users).subscribe((res: any) => {
+    this.commonService.postRequest(this.params, AdminAPI.get_all_employeee).subscribe((res: any) => {
       if (res) {
-        this.items = res?.users;
+        this.items = res?.employees;
         this.total_rows = res?.pagination?.total;
         this.loading = false;
       }
@@ -50,7 +50,7 @@ export class ListComponent implements OnInit {
   filterUsers() {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.getAllUsers();
+      this.getAllEmployee();
     }, 300);
   }
 
@@ -62,25 +62,25 @@ export class ListComponent implements OnInit {
     if (data.change_type === 'search') {
       this.filterUsers();
     } else {
-      this.getAllUsers();
+      this.getAllEmployee();
     }
   }
 
-  editUser(user: any = null) {
-    if (user) {
-      sessionStorage.setItem('generalInfoData', JSON.stringify(user));
+  editEmployee(employee: any = null) {
+    if (employee) {
+      sessionStorage.setItem('generalInfoData', JSON.stringify(employee));
     } else {
       sessionStorage.removeItem('generalInfoData');
     }
-    this.router.navigate(['/admin/user/create']);
+    this.router.navigate(['/admin/employee/create']);
   }
 
-  createInvoice(user: any = null) {
-    sessionStorage.setItem('userInvoiceData', JSON.stringify(user));
+  createInvoice(employee: any = null) {
+    sessionStorage.setItem('userInvoiceData', JSON.stringify(employee));
     this.router.navigate(['/admin/invoice/create']);
   }
 
-  deleteUser(id: any = null) {
+  deleteEmployee(id: any = null) {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -91,15 +91,15 @@ export class ListComponent implements OnInit {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.commonService.deleteRequest(AdminAPI.user, id).subscribe((res: any) => {
+        this.commonService.deleteRequest(AdminAPI.employee, id).subscribe((res: any) => {
           if (res?.success) {
             Swal.fire({
               title: "Deleted!",
-              text: "User has been deleted.",
+              text: "Employee has been deleted.",
               icon: "success"
             });
             this.params.current_page = 1;
-            this.getAllUsers();
+            this.getAllEmployee();
           }
         });
       }
@@ -107,4 +107,3 @@ export class ListComponent implements OnInit {
   }
 
 }
-

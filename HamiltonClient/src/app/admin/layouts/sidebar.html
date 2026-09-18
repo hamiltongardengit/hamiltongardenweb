@@ -4,7 +4,7 @@
         <div class="h-full bg-white dark:bg-[#0e1726]">
             <div class="flex items-center justify-between px-3 py-3">
                 <a routerLink="/" class="main-logo flex shrink-0 items-end">
-                    <img src="assets/clientTemplate/img/logo/HiltonGardenLogo.png" class="logo-display" alt="thumb">
+                    <img src="assets/clientTemplate/img/logo/H_final2.png" class="logo-display" alt="thumb">
                     <svg width="135" height="45" viewBox="0 0 350 61.68540421335756" class="looka-1j8o68f">
                         <defs id="SvgjsDefs2919"></defs>
                         <g id="SvgjsG2920" featurekey="SbCDzn-0"
@@ -30,7 +30,7 @@
                 </a>
             </div>
             <ng-scrollbar class="relative !h-[calc(100vh-80px)]" appearance="compact">
-                <ul class="relative space-y-0.5 p-4 py-0 font-semibold">
+                <ul class="relative space-y-0.5 p-4 pt-0 pb-4 font-semibold">
                     <!-- <li class="accordion menu nav-item">
                         <button type="button" class="nav-link group w-full"
                             [ngClass]="{ active: activeDropdown.includes('dashboard') }"
@@ -104,7 +104,7 @@
                                     </div>
                                 </a>
                             </li>
-                            <li class="nav-item" *ngIf="this.auth.getUserRole() != 'employee view'">
+                            <li class="nav-item" *ngIf="!this.auth.getUserRole()?.includes('employee_view')">
                                 <a routerLink="/admin/invoice" class="group" routerLinkActive="active"
                                     (click)="toggleMobileMenu()">
                                     <div class="flex items-center">
@@ -181,6 +181,60 @@
                                         <span
                                             class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{
                                             'package bookings' | titlecase}}</span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <h2
+                        class="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                        <icon-minus class="hidden h-5 w-4 flex-none" />
+                        <span>{{ ('Employee' | uppercase) || '&nbsp;' }}</span>
+                    </h2>
+                    
+                    <li class="nav-item">
+                        <ul>
+                            <li class="nav-item">
+                                <a routerLink="/admin/employee" class="group" routerLinkActive="active" (click)="toggleMobileMenu()">
+                                    <div class="flex items-center">
+                                        <icon-menu-users class="shrink-0 group-hover:!text-primary" />
+                                        <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{
+                                            'employee list' | titlecase}}</span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item" *ngIf="this.auth.getUserRole()?.includes('employee') || this.auth.getUserRole()?.includes('admin')">
+                        <ul>
+                            <li class="nav-item">
+                                <a routerLink="/admin/salary-commission" class="group" routerLinkActive="active" (click)="toggleMobileMenu()">
+                                    <div class="flex items-center">
+                                        <icon-menu-invoice class="shrink-0 group-hover:!text-primary" />
+                                        <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{
+                                            'salary commission' | titlecase}}</span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <h2
+                        class="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                        <icon-minus class="hidden h-5 w-4 flex-none" />
+                        <span>{{ ('Reports' | uppercase) || '&nbsp;' }}</span>
+                    </h2>
+                    
+                    <li class="nav-item">
+                        <ul>
+                            <li class="nav-item">
+                                <a routerLink="/admin/invoice/expiring-memberships" class="group" routerLinkActive="active" (click)="toggleMobileMenu()">
+                                    <div class="flex items-center">
+                                        <icon-menu-pages class="shrink-0 group-hover:!text-primary" />
+                                        <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{
+                                            'Membership Expiring' | titlecase}}</span>
                                     </div>
                                 </a>
                             </li>

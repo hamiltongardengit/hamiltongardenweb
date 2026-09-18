@@ -3,7 +3,8 @@
     <div class="panel flex-1 px-0 py-6 ltr:xl:mr-6 rtl:xl:ml-6">
       <div class="flex flex-wrap justify-between px-4">
         <div class="w-full lg:w-auto lg:max-w-fit">
-          <div class="mt-4 flex items-center" [ngClass]="isSubmitForm ? invoiceForm.get('invoiceDate').invalid ? 'has-error' : 'has-success' : ''">
+          <div class="mt-4 flex items-center"
+            [ngClass]="isSubmitForm ? invoiceForm.get('invoiceDate').invalid ? 'has-error' : 'has-success' : ''">
             <label for="startDate" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">Invoice Date</label>
             <input id="startDate" type="date" class="form-input w-2/3 lg:w-[250px]" formControlName="invoiceDate" />
             <ng-container *ngIf="isSubmitForm && !invoiceForm.get('invoiceDate').invalid">
@@ -16,7 +17,8 @@
           </div>
         </div>
         <div class="w-full lg:w-auto lg:max-w-fit">
-          <div class="mt-4 flex items-center" [ngClass]="isSubmitForm ? invoiceForm.get('invoiceType').invalid ? 'has-error' : 'has-success' : ''">
+          <div class="mt-4 flex items-center"
+            [ngClass]="isSubmitForm ? invoiceForm.get('invoiceType').invalid ? 'has-error' : 'has-success' : ''">
             <label for="invoiceType" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">Type</label>
             <select formControlName="invoiceType" class="form-select form-input w-2/3 lg:w-[250px]">
               <option value="" disabled>Select Type</option>
@@ -29,6 +31,32 @@
             </ng-container>
           </div>
         </div>
+
+          <div class="mt-4 flex items-center" formGroupName="membership"
+            [ngClass]="isSubmitForm ? invoiceForm.get('membership.startDate').invalid ? 'has-error' : 'has-success' : ''">
+            <label for="startDate" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">Start Date</label>
+            <input id="startDate" type="date" class="form-input w-2/3 lg:w-[250px]" formControlName="startDate" />
+            <ng-container *ngIf="isSubmitForm && !invoiceForm.get('membership.startDate').invalid">
+              <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+            </ng-container>
+            <ng-container
+              *ngIf="isSubmitForm && invoiceForm.get('membership.startDate').invalid && invoiceForm.get('membership.startDate').touched">
+              <p class="mt-1 ml-2 text-danger">Please fill the Start Date</p>
+            </ng-container>
+          </div>
+          <div class="mt-4 flex items-center" formGroupName="membership"
+            [ngClass]="isSubmitForm ? invoiceForm.get('membership.expiryDate').invalid ? 'has-error' : 'has-success' : ''">
+            <label for="startDate" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">Expiry Date</label>
+            <input id="startDate" type="date" class="form-input w-2/3 lg:w-[250px]" formControlName="expiryDate" />
+            <ng-container *ngIf="isSubmitForm && !invoiceForm.get('membership.expiryDate').invalid">
+              <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+            </ng-container>
+            <ng-container
+              *ngIf="isSubmitForm && invoiceForm.get('membership.expiryDate').invalid && invoiceForm.get('membership.expiryDate').touched">
+              <p class="mt-1 ml-2 text-danger">Please fill the Expiry Date</p>
+            </ng-container>
+          </div>
+
       </div>
       <hr class="my-6 dark:border-[#1b2e4b]" />
       <div class="mt-8 px-4">
@@ -60,7 +88,8 @@
                   *ngIf="isSubmitForm && invoiceForm.get('customer.email').errors?.['email'] && invoiceForm.get('customer.email').touched">
                   <p class="mt-1 text-danger">Invalid email</p>
                 </ng-container>
-                <ng-container *ngIf="isSubmitForm && invoiceForm.get('customer.email').invalid && invoiceForm.get('customer.email').touched">
+                <ng-container
+                  *ngIf="isSubmitForm && invoiceForm.get('customer.email').invalid && invoiceForm.get('customer.email').touched">
                   <p class="mt-1 text-danger">Please fill the Email</p>
                 </ng-container>
               </div>
@@ -87,7 +116,8 @@
                   *ngIf="isSubmitForm && invoiceForm.get('customer.contactNumber').errors?.['pattern'] && invoiceForm.get('customer.contactNumber').touched">
                   <p class="mt-1 text-danger">Invalid Phone number</p>
                 </ng-container>
-                <ng-container *ngIf="isSubmitForm && invoiceForm.get('customer.contactNumber').invalid && invoiceForm.get('customer.contactNumber').touched">
+                <ng-container
+                  *ngIf="isSubmitForm && invoiceForm.get('customer.contactNumber').invalid && invoiceForm.get('customer.contactNumber').touched">
                   <p class="mt-1 text-danger">Please fill the Phone Number</p>
                 </ng-container>
               </div>
@@ -117,7 +147,8 @@
                 <tr *ngFor="let item of getItems().controls; let i = index" [formGroupName]="i">
                   <td>
                     <div [ngClass]="isSubmitForm ? item.get('service').invalid ? 'has-error' : 'has-success' : ''">
-                      <input type="text" class="form-input min-w-[200px]" placeholder="Enter Item Name" formControlName="service" />
+                      <input type="text" class="form-input min-w-[200px]" placeholder="Enter Item Name"
+                        formControlName="service" />
                       <ng-container *ngIf="isSubmitForm && !item.get('service').invalid">
                         <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
                       </ng-container>
@@ -128,12 +159,13 @@
                   </td>
                   <td>
                     <div [ngClass]="isSubmitForm ? item.get('quantity').invalid ? 'has-error' : 'has-success' : ''">
-                      <input type="number" class="form-input w-32" placeholder="Quantity" formControlName="quantity" min="0"
-                        (ngModelChange)="calculateTotals()" />
+                      <input type="number" class="form-input w-32" placeholder="Quantity" formControlName="quantity"
+                        min="0" (ngModelChange)="calculateTotals()" />
                       <ng-container *ngIf="isSubmitForm && !item.get('quantity').invalid">
                         <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
                       </ng-container>
-                      <ng-container *ngIf="isSubmitForm && item.get('quantity').invalid && item.get('quantity').touched">
+                      <ng-container
+                        *ngIf="isSubmitForm && item.get('quantity').invalid && item.get('quantity').touched">
                         <p class="mt-1 text-danger">Please enter a valid Quantity</p>
                       </ng-container>
                     </div>
@@ -171,7 +203,8 @@
       <div class="mt-8 px-4">
         <div>
           <label for="notes">Remark</label>
-          <textarea id="notes" formControlName="notes" class="form-textarea min-h-[130px]" placeholder="Remark...."></textarea>
+          <textarea id="notes" formControlName="notes" class="form-textarea min-h-[130px]"
+            placeholder="Remark...."></textarea>
         </div>
       </div>
     </div>
@@ -188,19 +221,17 @@
               <label for="tax">Tax(%) </label>
               <input formControlName="taxRate" id="tax" type="number" class="form-input" placeholder="Tax"
                 (ngModelChange)="calculateTotals()" />
-              <ng-container
-                *ngIf="invoiceForm.get('taxRate').hasError('min') && invoiceForm.get('taxRate').touched">
+              <ng-container *ngIf="invoiceForm.get('taxRate').hasError('min') && invoiceForm.get('taxRate').touched">
                 <p class="mt-1 text-danger">Tax Rate must be positive</p>
               </ng-container>
-              <ng-container
-                *ngIf="invoiceForm.get('taxRate').hasError('max') && invoiceForm.get('taxRate').touched">
+              <ng-container *ngIf="invoiceForm.get('taxRate').hasError('max') && invoiceForm.get('taxRate').touched">
                 <p class="mt-1 text-danger">Tax Rate cannot be more than 100.</p>
               </ng-container>
             </div>
             <div>
               <label for="discountRate">Discount(%) </label>
-              <input formControlName="discountRate" id="discountRate" type="number" class="form-input" placeholder="Discount"
-                (ngModelChange)="calculateTotals()" />
+              <input formControlName="discountRate" id="discountRate" type="number" class="form-input"
+                placeholder="Discount" (ngModelChange)="calculateTotals()" />
               <ng-container
                 *ngIf="invoiceForm.get('discountRate').hasError('min') && invoiceForm.get('discountRate').touched">
                 <p class="mt-1 text-danger">Discount Rate must be positive</p>

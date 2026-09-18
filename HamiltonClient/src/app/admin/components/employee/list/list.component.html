@@ -1,34 +1,18 @@
 <div>
   <div class="mb-2 flex items-center justify-between">
-    <h5 class="text-lg font-semibold dark:text-white-light">Destinations</h5>
+    <h5 class="text-lg font-semibold dark:text-white-light">Employee List</h5>
   </div>
   <div class="panel border-[#e0e6ed] px-0 pb-1.5 dark:border-[#1b2e4b]">
     <div class="datatable invoice-table">
       <div class="mb-4.5 flex flex-col gap-5 px-3 md:flex-row md:items-center">
         <div>
-          <a routerLink="/admin/destination/create" class="btn btn-primary gap-2">
+          <a routerLink="/admin/employee/create" class="btn btn-primary gap-2">
             <icon-plus />
             Add New
           </a>
         </div>
-        <div class="flex flex-col gap-2 sm:flex-row sm:ltr:ml-auto rtl:mr-auto">
-          <div>
-            <input [(ngModel)]="search" type="text" class="form-input" placeholder="Search..." />
-          </div>
-          <div>
-            <select id="category" class="form-select text-white-dark w-full md:w-40" [(ngModel)]="this.params.category" (ngModelChange)="changeServer(1, 'category')">
-              <option value="">All</option>
-              <option value="Domestic">Domestic</option>
-              <option value="International">Hashtag</option>
-            </select>
-          </div>
-          <div>
-            <select id="category" class="form-select text-white-dark w-full md:w-40" [(ngModel)]="this.params.location"
-              (ngModelChange)="changeServer(1)">
-              <option value="">All</option>
-              <option *ngFor="let item of this.locations" value={{item}}>{{item}}</option>
-            </select>
-          </div>
+        <div class="sm:ltr:ml-auto">
+          <input [(ngModel)]="search" type="text" class="form-input" placeholder="Search..." />
         </div>
       </div>
 
@@ -43,22 +27,31 @@
           <a routerLink="/apps/invoice/preview" class="font-semibold text-primary underline hover:no-underline">#{{
             value.invoiceNumber }}</a>
         </ng-template>
-        <ng-template slot="ratings" let-value="data">
-          <div class="flex items-center justify-start text-warning">
-            <div *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
-              <icon-star *ngIf="i < value?.ratings" class="fill-warning"></icon-star>
-            </div>
-            <div *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
-              <icon-star *ngIf="i < (5-value?.ratings)"></icon-star>
-            </div>
+        <ng-template slot="name" let-value="data">
+          <div class="flex items-center font-semibold">
+            <!-- <div class="w-max rounded-full bg-white-dark/30 p-0.5 ltr:mr-2 rtl:ml-2">
+              <img class="h-8 w-8 rounded-full object-cover" [src]="'/assets/images/profile-'+ value.id + '.jpeg'" />
+            </div> -->
+            {{ (value?.firstname + ' ' + value?.lastname) | titlecase }}
           </div>
+        </ng-template>
+        <ng-template slot="role" let-value="data">
+          <span class="badge"
+            [ngClass]="[value.roles?.[0]?.toLowerCase() !== 'user' ? 'badge-outline-success' : 'badge-outline-warning']">{{
+            value.roles?.[0] | titlecase }}</span>
         </ng-template>
         <ng-template slot="actions" let-value="data">
           <div class="flex items-center justify-center gap-4">
-            <button (click)="editDestination(value)" class="hover:text-info">
+            <button (click)="editEmployee(value)" class="hover:text-info"
+              [disabled]="value?.roles?.includes('admin') && !this.auth.getUserRole()?.includes('admin')">
               <icon-edit class="h-4.5 w-4.5" />
             </button>
-            <button type="button" class="hover:text-danger" (click)="deleteDestination(value._id)" [disabled]="!this.auth.getUserRole()?.includes('admin')">
+            <!-- <button class="hover:text-success" (click)="createInvoice(value)"
+              [disabled]="value?.role === 'admin' && !this.auth.getUserRole()?.includes('admin')">
+              <icon-printer />
+            </button> -->
+            <button type="button" class="hover:text-danger" (click)="deleteEmployee(value._id)"
+              [disabled]="!this.auth.getUserRole()?.includes('admin')">
               <icon-trash-lines />
             </button>
           </div>

@@ -25,6 +25,13 @@
         <icon-user class="h-5 w-5" />
         Supporting Documents
       </a>
+      <a href="javascript:;"
+        class="flex gap-2 border-b border-transparent p-4 !outline-none hover:border-primary hover:text-primary"
+        [ngClass]="{ '!border-primary text-primary':  activeTab.toLowerCase() === 'link-employee'}"
+        (click)="activeTab = 'link-employee'">
+        <icon-user class="h-5 w-5" />
+        Link Employee
+      </a>
     </div>
     <div>
       <div *ngIf="activeTab.toLowerCase() === 'home'">
@@ -118,8 +125,8 @@
                 <label for="role">Role</label>
                 <select id="role" class="form-select text-white-dark" formControlName="role">
                   <option value="user">User</option>
-                  <option value="employee">Employee</option>
-                  <option value="employee view">Employee View Only</option>
+                  <!-- <option value="employee">Employee</option>
+                  <option value="employee view">Employee View Only</option> -->
                   <!-- <option value="admin">Admin</option> -->
                 </select>
               </div>
@@ -257,7 +264,8 @@
               <div
                 [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('destinationId').invalid ? 'has-error' : 'has-success' : ''">
                 <label for="destinationId">Destination</label>
-                <select id="destinationId" class="form-select text-white-dark" formControlName="destinationId" (change)="onDestinationChange($event)">
+                <select id="destinationId" class="form-select text-white-dark" formControlName="destinationId"
+                  (change)="onDestinationChange($event)">
                   <option value="ps">Please Select</option>
                   <option *ngFor="let item of destinations" value="{{item?._id}}">{{item?.name}}({{item?.location}})
                   </option>
@@ -268,8 +276,10 @@
               <div *ngIf="isOtherDestinationSelected"
                 [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('manualDestination').invalid ? 'has-error' : 'has-success' : ''">
                 <label for="manualDestination">Other Destination</label>
-                <input type="text" class="form-input" placeholder="Enter other destination" formControlName="manualDestination" />
-                <ng-container *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('manualDestination').invalid">
+                <input type="text" class="form-input" placeholder="Enter other destination"
+                  formControlName="manualDestination" />
+                <ng-container
+                  *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('manualDestination').invalid">
                   <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
                 </ng-container>
                 <ng-container
@@ -280,8 +290,10 @@
               <div *ngIf="isOtherDestinationSelected"
                 [ngClass]="isSubmitMembershipInfoForm ? membershipInfoForm.get('manualDestinationLocation').invalid ? 'has-error' : 'has-success' : ''">
                 <label for="manualDestinationLocation">Other Destination</label>
-                <input type="text" class="form-input" placeholder="Enter other destination" formControlName="manualDestinationLocation" />
-                <ng-container *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('manualDestinationLocation').invalid">
+                <input type="text" class="form-input" placeholder="Enter other destination"
+                  formControlName="manualDestinationLocation" />
+                <ng-container
+                  *ngIf="isSubmitMembershipInfoForm && !membershipInfoForm.get('manualDestinationLocation').invalid">
                   <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
                 </ng-container>
                 <ng-container
@@ -385,19 +397,21 @@
             <div class="image-preview" *ngIf="imagePreviews.length > 0">
               <div *ngFor="let preview of imagePreviews; let i = index" class="image-preview-item"
                 style="background-image: url({{preview}}); ">
-        
+
                 <span class="image-preview-item-clear" (click)="removeImage(i)">
                   <span class="image-preview-item-clear-icon" data-upload-name="red.jpg:upload:02d900ca7335d">
                     ×
                   </span>
                 </span>
-        
+
               </div>
             </div>
           </div>
-        
+
           <!-- Save Button -->
-          <div class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1 justify-center lg:justify-end " *ngIf="!this.docData?.public_id">
+          <div
+            class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1 justify-center lg:justify-end "
+            *ngIf="!this.docData?.public_id">
             <button type="button" class="btn btn-danger sm:w-full lg:w-1/4 gap-2" (click)="onCancel()">
               <icon-x class="shrink-0 ltr:mr-2 rtl:ml-2" />
               Cancel
@@ -407,12 +421,51 @@
               Upload
             </button>
           </div>
-          <div class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1 justify-center lg:justify-end " *ngIf="this.docData?.public_id">
+          <div
+            class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1 justify-center lg:justify-end "
+            *ngIf="this.docData?.public_id">
             <a type="button" class="btn btn-success sm:w-full lg:w-1/4 gap-2" href="{{this.docData?.url}}">
               <icon-save class="shrink-0 ltr:mr-2 rtl:ml-2" />
               Download
             </a>
           </div>
+        </div>
+      </div>
+      <div *ngIf="activeTab.toLowerCase() === 'link-employee'" class="switch">
+        <div class="rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+
+          <form [formGroup]="generalInfoForm"
+            class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+            <h6 class="mb-5 text-lg font-semibold">Assign the Employee to Customer</h6>
+            <div class="flex flex-col sm:flex-row">
+              <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
+                <div
+                  [ngClass]="isSubmitForm ? generalInfoForm.get('assignedEmployee').invalid ? 'has-error' : 'has-success' : ''">
+                  <label for="assignedEmployee">Assign Employee</label>
+                  <select id="assignedEmployee" class="form-select text-white-dark" formControlName="assignedEmployee">
+                    <option value="">Please Select</option>
+                    <option *ngFor="let emp of employeeList" value={{emp._id}}>{{emp.firstname}} {{emp.lastname ?
+                      emp.lastname : ''}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- Save Button -->
+          <div
+            class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1 justify-center lg:justify-end">
+            <button type="button" class="btn btn-danger sm:w-full lg:w-1/4 gap-2" (click)="onCancel()">
+              <icon-x class="shrink-0 ltr:mr-2 rtl:ml-2" />
+              Cancel
+            </button>
+            <button type="button" class="btn btn-success sm:w-full lg:w-1/4 gap-2" (click)="onAssignEmployee()">
+              <icon-save class="shrink-0 ltr:mr-2 rtl:ml-2" />
+              Save
+            </button>
+          </div>
+
         </div>
       </div>
     </div>

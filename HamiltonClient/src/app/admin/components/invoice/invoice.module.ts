@@ -7,10 +7,11 @@ import { IconModule } from '../../shared/icon/icon.module';
 import { DataTableModule } from '@bhplugin/ng-datatable';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateComponent } from './create/create.component';
+import { MembershipExpiringReportComponent } from './membership-expiring-report/membership-expiring-report.component';
 
 
 @NgModule({
-  declarations: [ListComponent, CreateComponent],
+  declarations: [ListComponent, CreateComponent, MembershipExpiringReportComponent],
   imports: [
     CommonModule,
     InvoiceRoutingModule,

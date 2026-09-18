@@ -39,7 +39,7 @@
     <nav class="navbar navbar-expand-lg" [ngClass]="{'fixed-top': isNavbarFixed}">
       <div class="container g-0">
         <a class="navbar-brand d-flex align-items-center" [routerLink]="['/home']">
-          <img src="assets/clientTemplate/img/logo/HiltonGardenLogo.png" class="logo-display" alt="thumb" loading="lazy">
+          <img src="assets/clientTemplate/img/logo/H_final2.png" class="logo-display" alt="thumb" loading="lazy">
           <svg width="200" height="50" viewBox="0 0 350 71.03677543707913" class="looka-1j8o68f logo-display">
             <defs id="SvgjsDefs1011"></defs>
             <g id="SvgjsG1012" featurekey="nameFeature-0"
@@ -56,7 +56,7 @@
               </path>
             </g>
           </svg>
-          <img src="assets/clientTemplate/img/logo/HiltonGardenLogo.png" class="logo-scrolled" alt="thumb" loading="lazy">  
+          <img src="assets/clientTemplate/img/logo/H_final2.png" class="logo-scrolled" alt="thumb" loading="lazy">  
           <svg width="200" height="50" viewBox="0 0 350 61.68540421335756" class="looka-1j8o68f logo-scrolled">
             <defs id="SvgjsDefs2919"></defs>
             <g id="SvgjsG2920" featurekey="SbCDzn-0"
@@ -117,7 +117,7 @@
               <a class="nav-link dropdown-toggle" [routerLink]="['/']" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
               <ul class="dropdown-menu fade-up">
                 <li><a class="dropdown-item" [routerLink]="['/admin']" (click)="collapseNavbar()"
-                    *ngIf="auth.getUserRole() !== 'user'">Dashboard</a></li>
+                    *ngIf="!auth.getUserRole()?.includes('user')">Dashboard</a></li>
                 <li><a class="dropdown-item" [routerLink]="['/auth/my-profile']" (click)="collapseNavbar()">My Profile</a>
                 </li>
                 <li><a class="dropdown-item" [routerLink]="['/testimonials']"

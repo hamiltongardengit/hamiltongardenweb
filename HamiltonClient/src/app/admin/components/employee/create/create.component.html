@@ -1,0 +1,333 @@
+<div>
+  <div>
+    <div class="mb-3 flex items-center justify-between">
+      <h5 class="text-lg font-semibold dark:text-white-light">Create Employee</h5>
+    </div>
+    <div
+      class="mb-5 flex overflow-y-auto whitespace-nowrap border-b border-[#ebedf2] font-semibold dark:border-[#191e3a]">
+      <a href="javascript:;"
+        class="flex gap-2 border-b border-transparent p-4 !outline-none hover:border-primary hover:text-primary"
+        [ngClass]="{ '!border-primary text-primary':  activeTab.toLowerCase() === 'home'}" (click)="activeTab = 'home'">
+        <icon-home />
+        Employment Details
+      </a>
+      <a href="javascript:;" *ngIf="this.userId"
+        class="flex gap-2 border-b border-transparent p-4 !outline-none hover:border-primary hover:text-primary"
+        [ngClass]="{ '!border-primary text-primary':  activeTab.toLowerCase() === 'supporting-document'}"
+        (click)="activeTab = 'supporting-document'">
+        <icon-user class="h-5 w-5" />
+        Supporting Offer Letter
+      </a>
+      <a href="javascript:;"
+        class="flex gap-2 border-b border-transparent p-4 !outline-none hover:border-primary hover:text-primary"
+        [ngClass]="{ '!border-primary text-primary':  activeTab.toLowerCase() === 'linked-customers'}"
+        (click)="activeTab = 'linked-customers'">
+        <icon-user class="h-5 w-5" />
+        Linked Customers
+      </a>
+
+    </div>
+    <div>
+      <div *ngIf="activeTab.toLowerCase() === 'home'">
+        <form [formGroup]="generalInfoForm"
+          class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+          <h6 class="mb-5 text-lg font-semibold">General Information</h6>
+          <div class="flex flex-col sm:flex-row">
+            <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
+
+              <!-- Firstname Field -->
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('firstname').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="firstname">Firstname</label>
+                <input id="firstname" type="text" placeholder="Firstname" class="form-input"
+                  formControlName="firstname" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('firstname').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('firstname').invalid && generalInfoForm.get('firstname').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter a valid firstname</p>
+                </ng-container>
+              </div>
+
+              <!-- Lastname Field -->
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('lastname').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="lastname">Lastname</label>
+                <input id="lastname" type="text" placeholder="Lastname" class="form-input" formControlName="lastname" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('lastname').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('lastname').invalid && generalInfoForm.get('lastname').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter a valid lastname</p>
+                </ng-container>
+              </div>
+
+              <!-- Email Field -->
+              <div [ngClass]="isSubmitForm ? generalInfoForm.get('email').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="Jimmy@gmail.com" class="form-input" autocomplete="off"
+                  formControlName="email" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('email').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('email').invalid && generalInfoForm.get('email').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter a valid email</p>
+                </ng-container>
+              </div>
+
+              <!-- Phone Field -->
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('contactNumber').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="contactNumber">Phone</label>
+                <input id="contactNumber" type="text" placeholder="9876543210" class="form-input"
+                  formControlName="contactNumber" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('contactNumber').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('contactNumber').invalid && generalInfoForm.get('contactNumber').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter a valid phone number</p>
+                </ng-container>
+              </div>
+
+              <!-- Password Field -->
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('password').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="password">Password</label>
+                <div class="password-input-container" style="position: relative;">
+                  <input id="password" [type]="showPassword ? 'text' : 'password'" placeholder="**********"
+                    class="form-input" formControlName="password" />
+                  <button type="button" class="toggle-password-btn" (click)="togglePasswordVisibility()"
+                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer;">
+                    <i [class]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+                  </button>
+                </div>
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('password').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('password').invalid && generalInfoForm.get('password').touched">
+                  <p class="mt-1 ml-2 text-danger">Password must be at least 6 characters long</p>
+                </ng-container>
+              </div>
+
+              <!-- Roles Field -->
+              <div [ngClass]="isSubmitForm ? generalInfoForm.get('roles').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="roles">Roles</label>
+                <div class="space-y-2">
+                  <div *ngFor="let role of availableRoles" class="flex items-center">
+                    <input type="checkbox" 
+                           [id]="'role-' + role.value" 
+                           [value]="role.value"
+                           [checked]="selectedRoles.includes(role.value)"
+                           (change)="onRoleChange($event)"
+                           class="form-checkbox">
+                    <label [for]="'role-' + role.value" class="ml-2">{{role.label}}</label>
+                  </div>
+                </div>
+                <ng-container *ngIf="isSubmitForm && generalInfoForm.get('roles').invalid">
+                  <p class="mt-1 ml-2 text-danger">Please select at least one role</p>
+                </ng-container>
+              </div>
+
+              <!-- <div [ngClass]="isSubmitForm ? generalInfoForm.get('role').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="role">Role</label>
+                <select id="role" class="form-select text-white-dark" formControlName="role">
+                  <option value="user">User</option>
+                  <option value="employee">Employee</option>
+                  <option value="employee_view">Employee View Only</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div> -->
+
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('birthdate').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="birthdate">Birth Date</label>
+                <input id="birthdate" type="date" class="form-input" formControlName="birthdate" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('birthdate').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('birthdate').invalid && generalInfoForm.get('birthdate').touched">
+                  <p class="mt-1 ml-2 text-danger">Please fill the Birth Date</p>
+                </ng-container>
+              </div>
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('anniversaryDate').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="anniversaryDate">Anniversary Date</label>
+                <input id="anniversaryDate" type="date" class="form-input" formControlName="anniversaryDate" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('anniversaryDate').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('anniversaryDate').invalid && generalInfoForm.get('anniversaryDate').touched">
+                  <p class="mt-1 ml-2 text-danger">Please fill the Anniversary Date</p>
+                </ng-container>
+              </div>
+
+              <!-- Address Field -->
+              <div [ngClass]="isSubmitForm ? generalInfoForm.get('address').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="address">Address</label>
+                <input id="address" type="text" placeholder="Address" class="form-input" formControlName="address" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('address').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('address').invalid && generalInfoForm.get('address').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter an address</p>
+                </ng-container>
+              </div>
+
+              <!-- City Field -->
+              <div [ngClass]="isSubmitForm ? generalInfoForm.get('city').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="city">City</label>
+                <input id="city" type="text" placeholder="City" class="form-input" formControlName="city" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('city').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('city').invalid && generalInfoForm.get('city').touched">
+                  <p class="mt-1 ml-2 text-danger">Please enter a city</p>
+                </ng-container>
+              </div>
+
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('dateOfJoining').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="dateOfJoining">Date Of Joining</label>
+                <input id="dateOfJoining" type="date" class="form-input" formControlName="dateOfJoining" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('dateOfJoining').invalid">
+                  <p class="mt-1 ml-2 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('dateOfJoining').invalid && generalInfoForm.get('dateOfJoining').touched">
+                  <p class="mt-1 ml-2 text-danger">Please fill the Date Of Joining</p>
+                </ng-container>
+              </div>
+              
+              
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('employmentType').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="employmentType">Employment Type</label>
+                <select id="employmentType" class="form-select text-white-dark" formControlName="employmentType">
+                  <option value="ps">Please Select</option>
+                  <option value="Salary">Salary</option>
+                  <option value="Commission">Commission</option>
+                </select>
+              </div>
+              
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('salaryStructure').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="endDate">Salary</label>
+                <input type="number" class="form-input" placeholder="25000" formControlName="salaryStructure" min="0" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('salaryStructure').invalid">
+                  <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('salaryStructure').invalid && generalInfoForm.get('salaryStructure').touched">
+                  <p class="mt-1 text-danger">Please enter the Salary</p>
+                </ng-container>
+              </div>
+              <div
+                [ngClass]="isSubmitForm ? generalInfoForm.get('commissionRate').invalid ? 'has-error' : 'has-success' : ''">
+                <label for="endDate">Commission Rate</label>
+                <input type="number" class="form-input" placeholder="2" formControlName="commissionRate" min="0" />
+                <ng-container *ngIf="isSubmitForm && !generalInfoForm.get('commissionRate').invalid">
+                  <p class="mt-1 text-[#1abc9c]">Looks Good!</p>
+                </ng-container>
+                <ng-container
+                  *ngIf="isSubmitForm && generalInfoForm.get('commissionRate').invalid && generalInfoForm.get('commissionRate').touched">
+                  <p class="mt-1 text-danger">Please enter the Commission Rate</p>
+                </ng-container>
+              </div>
+
+              <div></div>
+              <!-- Save Button -->
+              <div class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1">
+                <button type="button" class="btn btn-danger w-full gap-2" (click)="onCancel()">
+                  <icon-x class="shrink-0 ltr:mr-2 rtl:ml-2" />
+                  Cancel
+                </button>
+                <button type="button" class="btn btn-success w-full gap-2" (click)="onSave()">
+                  <icon-save class="shrink-0 ltr:mr-2 rtl:ml-2" />
+                  Create
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="activeTab.toLowerCase() === 'supporting-document'" class="switch">
+        <div class="rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+          <div data-upload-id="mySecondImage" class="custom-file-container">
+            <h6 class="mb-5 text-lg font-semibold">Supporting Offer Letter</h6>
+            <div class="label-container">
+              <label>{{this.docData?.public_id ? 'Uploaded Document' : 'Upload Document'}}</label>
+            </div>
+            <label class="input-container" *ngIf="!this.docData?.public_id">
+              <input accept=".pdf" aria-label="Choose File" class="input-hidden" (change)="onImageChange($event)"
+                id="file-upload-with-preview-mySecondImage" type="file" />
+              <span class="input-visible">Choose file...<span class="browse-button">Browse</span></span>
+            </label>
+            <div class="image-preview" *ngIf="imagePreviews.length < 1"
+              style="background-image: url('../../../../../assets/admin/images/file-preview.svg');">
+            </div>
+            <div class="image-preview" *ngIf="imagePreviews.length > 0">
+              <div *ngFor="let preview of imagePreviews; let i = index" class="image-preview-item"
+                style="background-image: url({{preview}}); ">
+
+                <span class="image-preview-item-clear" (click)="removeImage(i)">
+                  <span class="image-preview-item-clear-icon" data-upload-name="red.jpg:upload:02d900ca7335d">
+                    ×
+                  </span>
+                </span>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Save Button -->
+          <div
+            class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1 justify-center lg:justify-end "
+            *ngIf="!this.docData?.public_id">
+            <button type="button" class="btn btn-danger sm:w-full lg:w-1/4 gap-2" (click)="onCancel()">
+              <icon-x class="shrink-0 ltr:mr-2 rtl:ml-2" />
+              Cancel
+            </button>
+            <button type="button" class="btn btn-success sm:w-full lg:w-1/4 gap-2" (click)="onAgreementSave()">
+              <icon-save class="shrink-0 ltr:mr-2 rtl:ml-2" />
+              Upload
+            </button>
+          </div>
+          <div
+            class="flex flex-cols-1 gap-4 sm:flex-cols-2 lg:flex-cols-4 xl:flex-cols-1 justify-center lg:justify-end "
+            *ngIf="this.docData?.public_id">
+            <a type="button" class="btn btn-success sm:w-full lg:w-1/4 gap-2" href="{{this.docData?.url}}">
+              <icon-save class="shrink-0 ltr:mr-2 rtl:ml-2" />
+              Download
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeTab.toLowerCase() === 'linked-customers'">
+
+          <div class="panel border-[#e0e6ed] px-0 pb-1.5 dark:border-[#1b2e4b]">
+            <div class="mb-2 ml-2 flex items-center justify-between">
+              <h5 class="text-lg ml-2 font-semibold dark:text-white-light">Linked Customers</h5>
+            </div>
+            <div class="datatable invoice-table">
+      
+              <ng-datatable #datatable [rows]="items" [columns]="cols" skin="whitespace-nowrap bh-table-hover">
+      
+              </ng-datatable>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

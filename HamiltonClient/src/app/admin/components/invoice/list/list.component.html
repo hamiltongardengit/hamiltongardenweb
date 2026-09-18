@@ -80,7 +80,7 @@
             <a type="button" class="hover:text-primary" (click)="exportInvoices(value?._id)">
               <icon-download />
             </a>
-            <button type="button" class="hover:text-danger" (click)="deleteRow(value._id)" [disabled]="this.auth.getUserRole() != 'admin'">
+            <button type="button" class="hover:text-danger" (click)="deleteRow(value._id)" [disabled]="!this.auth.getUserRole()?.includes('admin')">
               <icon-trash-lines />
             </button>
           </div>

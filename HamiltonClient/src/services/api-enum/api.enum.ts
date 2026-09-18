@@ -30,4 +30,9 @@ export enum AdminAPI {
     agreement = 'admin/agreement',
     get_all_enquiries = 'admin/get-all-enquiries',
     get_all_membership_booking = 'admin/get-all-membership-booking',
+    create_employee = 'admin/create-employee',
+    get_all_employeee = 'admin/get-all-employee',
+    employee = 'admin/employee',
+    assign_customers_to_employee = 'admin/assign-customers-to-employee',
+    get_expiring_memberships = 'admin/get-expiring-memberships',
 }

@@ -14,21 +14,26 @@ export class AuthService {
   currentUser$ = this.currentUserSubject.asObservable();
   private idleState = 'Not started.';
   private timedOut = false;
-  private idleTimeout: number = Number(environment.idleTimeout) || 1800; // (in seconds)
+  private idleTimeout = environment.idleTimeout || 1800; // (in seconds)
   private keepAliveInterval = 10; // Keepalive interval (in minutes)
 
   constructor(private http: HttpClient, private idle: Idle, private router: Router) {
     this.setupIdle();
    }
 
-  login(creds : Object): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}login`, creds, { withCredentials: true }).pipe(
-      tap(user => {
-        sessionStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        this.resetIdle(); // Start watching for idle after successful login
-      })
-    );
+  login(creds: Object): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}login`, creds, { withCredentials: true });
+  }
+  verifyOtp(userId: string, otp: string): Observable<any> {
+    // Second step: Verify OTP and get final token
+    return this.http.post<any>(`${this.apiUrl}verify-otp`, { userId, otp }, { withCredentials: true })
+      .pipe(
+        tap(user => {
+          sessionStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUserSubject.next(user);
+          this.resetIdle(); // Start idle watcher
+        })
+      );
   }
 
   logout(): void {
@@ -49,11 +54,11 @@ export class AuthService {
 
   isAdmin(): boolean {
     const user = JSON.parse(sessionStorage.getItem('currentUser'));
-    return user ? user?.user?.role === 'admin' : false;
+    return user ? user?.user?.roles?.includes('admin') : false;
   }
-  getUserRole(): string | null {
+  getUserRole(): string[] | null {
     const user = JSON.parse(sessionStorage.getItem('currentUser'));
-    return user ? user.user?.role : 'user';
+    return user ? user.user?.roles || ['user'] : ['user'];
   }
 
   setupIdle() {

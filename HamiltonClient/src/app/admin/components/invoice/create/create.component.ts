@@ -37,6 +37,12 @@ export class CreateComponent implements OnInit {
         if (invoice.invoiceDate) {
           invoice.invoiceDate = new Date(invoice.invoiceDate).toISOString().split('T')[0];
         }
+        if (invoice.membership.startDate) {
+          invoice.membership.startDate = new Date(invoice.membership.startDate).toISOString().split('T')[0];
+        }
+        if (invoice.membership.expiryDate) {
+          invoice.membership.expiryDate = new Date(invoice.membership.expiryDate).toISOString().split('T')[0];
+        }
         this.populateForm(invoice);
       } catch (error) {
         console.error('Error parsing invoice data:', error);
@@ -67,6 +73,10 @@ export class CreateComponent implements OnInit {
         contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
       }),
       items: this.fb.array([]),
+      membership: this.fb.group({
+        startDate: [this.todayDate, Validators.required],
+        expiryDate: [this.todayDate, Validators.required],
+      }),
       taxRate: [18, [Validators.required, Validators.min(0), Validators.max(100)]],
       discountRate: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       paidAmount: [0, Validators.min(0)],
@@ -92,6 +102,10 @@ export class CreateComponent implements OnInit {
           contactNumber: [invoice.contactNumber, [Validators.required, Validators.pattern('^[0-9]{10}$')]]
         }),
         items: this.fb.array([]),
+        membership: this.fb.group({
+          startDate: [this.todayDate, Validators.required],
+          expiryDate: [this.todayDate, Validators.required],
+        }),
         taxRate: [18, [Validators.required, Validators.min(0), Validators.max(100)]],
         discountRate: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
         paidAmount: [0, Validators.min(0)],
@@ -119,6 +133,10 @@ export class CreateComponent implements OnInit {
           taxAmount: [{ value: item.taxAmount, disabled: true }],
           subtotal: [{ value: item.subtotal, disabled: true }]
         }))),
+        membership: this.fb.group({
+          startDate: [invoice.membership.startDate, Validators.required],
+          expiryDate: [invoice.membership.expiryDate, Validators.required],
+        }),
         taxRate: [invoice.taxRate, [Validators.required, Validators.min(0), Validators.max(100)]],
         discountRate: [invoice.discountRate, [Validators.required, Validators.min(0), Validators.max(100)]],
         paidAmount: [invoice.paidAmount, Validators.min(0)],

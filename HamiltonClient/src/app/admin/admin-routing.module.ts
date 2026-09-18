@@ -24,6 +24,11 @@ const routes: Routes = [
         canActivate: [AdminGuard]
       },
       {
+        path: 'employee',
+        loadChildren: () => import('./components/employee/employee.module').then(m => m.EmployeeModule),
+        canActivate: [AdminGuard]
+      },
+      {
         path: 'destination',
         loadChildren: () => import('./components/destination/destination.module').then(m => m.DestinationModule),
         canActivate: [AdminGuard]

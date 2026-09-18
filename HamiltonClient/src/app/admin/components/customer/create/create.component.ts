@@ -46,12 +46,14 @@ export class CreateComponent implements OnInit {
   removedImages = [];
   docData: any;
   isOtherDestinationSelected: boolean = false;
+  employeeList = [];
 
   constructor(private fb: FormBuilder, private router: Router, private commonService: CommonService, private auth: AuthService) { }
 
   ngOnInit(): void {
     const storedUserData = sessionStorage.getItem('generalInfoData');
     this.todayDate = new Date().toISOString().split('T')[0];
+    this.getAllEmployee();
 
     if (storedUserData) {
       try {
@@ -68,9 +70,21 @@ export class CreateComponent implements OnInit {
     } else {
       this.initForm();
     }
-    if (this.auth.getUserRole() == 'employee view') {
+    if (this.auth.getUserRole()?.includes('employee_view')) {
       this.generalInfoForm.disable();
     }
+  }
+
+  getAllEmployee() {
+    const params = {
+      current_page: 1,
+      pagesize: 100,
+    };
+    this.commonService.postRequest(params, AdminAPI.get_all_employeee).subscribe((res: any) => {
+      if (res) {
+        this.employeeList = res?.employees;
+      }
+    })
   }
 
   initForm() {
@@ -81,6 +95,7 @@ export class CreateComponent implements OnInit {
       contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       role: ['user', Validators.required],
+      assignedEmployee: [''],
       address: ['', [Validators.required, Validators.minLength(6)]],
       city: ['', Validators.required],
       birthdate: ['', Validators.required],
@@ -96,6 +111,7 @@ export class CreateComponent implements OnInit {
       contactNumber: [user?.contactNumber, [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       password: ['', [Validators.minLength(8)]],
       role: [user?.role, Validators.required],
+      assignedEmployee: [user?.assignedEmployee || ''],
       address: [user?.address, [Validators.required, Validators.minLength(6)]],
       city: [user?.city, Validators.required],
       birthdate: [user?.birthdate ? new Date(user?.birthdate).toISOString().split('T')[0] : '', Validators.required],
@@ -372,6 +388,32 @@ export class CreateComponent implements OnInit {
         });
       }
     });
+  }
+
+  onAssignEmployee() {
+    const assignedEmployee = this.generalInfoForm.get('assignedEmployee').value;
+    if (assignedEmployee) {
+      const data = {
+        customerIds: [this.userId],
+        employeeId: assignedEmployee
+      };
+      this.commonService.postRequest(data, AdminAPI.assign_customers_to_employee).subscribe((res: any) => {
+        if (res?.success) {
+          Swal.fire({
+            title: "Assigned!",
+            text: "Customer has been assigned to the employee.",
+            icon: "success"
+          });
+          this.router.navigate(['/admin/user/list']);
+        }
+      });
+    } else {
+      Swal.fire({
+        title: "Error!",
+        text: "Please select an employee to assign.",
+        icon: "error"
+      });
+    }
   }
 
   onCancel(): void {

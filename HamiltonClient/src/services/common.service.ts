@@ -48,7 +48,7 @@ export class CommonService {
     }).pipe(catchError(this.errorHandler));
   }
 
-  find<T>(id: number, url: string): Observable<T> {
+  find<T>(id: any, url: string): Observable<T> {
     return this.http.get<T>(`${this.apiURL}${url}/${id}`, this.getHttpOptions())
       .pipe(catchError(this.errorHandler));
   }

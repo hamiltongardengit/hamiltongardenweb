@@ -2,7 +2,7 @@
     <div class="relative flex w-full items-center bg-white px-2 md:px-5 py-2.5 dark:bg-[#0e1726]">
         <div class="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
             <a routerLink="/" class="main-logo flex shrink-0 items-center">
-                <img src="assets/clientTemplate/img/logo/HiltonGardenLogo.png" class="logo-display w-16" alt="thumb">
+                <img src="assets/clientTemplate/img/logo/H_final2.png" class="logo-display w-16" alt="thumb">
                 <svg width="135" height="45" viewBox="0 0 350 61.68540421335756" class="looka-1j8o68f">
                     <defs id="SvgjsDefs2919"></defs>
                     <g id="SvgjsG2920" featurekey="SbCDzn-0"
@@ -112,7 +112,7 @@
                                 <div class="truncate ltr:pl-4 rtl:pr-4">
                                     <h4 class="text-base">
                                         {{this.currentUser?.firstname + ' ' + this.currentUser?.lastname}}<span
-                                            class="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">{{this.currentUser?.role | titlecase}}</span>
+                                            class="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">{{this.currentUser?.roles[0] | titlecase}}</span>
                                     </h4>
                                     <a class="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white"
                                         href="javascript:;">{{this.currentUser?.email}}</a>
